@@ -1,6 +1,9 @@
 import { Result } from 'neverthrow';
-import { isValidArticleStatus, toBody, toTitle } from '../model/validators';
-import { ArticleStatus, ValidatedArticle } from '../model/article';
+
+import { ValidatedArticle } from '../model/article';
+import { toArticleStatus } from '../model/article-status';
+import { toTitle } from '../model/article-title';
+import { toBody } from '../model/article-body';
 
 export interface CreateArticleCommand {
   authorId: string;
@@ -26,18 +29,15 @@ export const toCreateArticleCommand = (
 export const createArticle = (
   cmd: CreateArticleCommand,
 ): Result<ValidatedArticle, Error> => {
-  const status = isValidArticleStatus(cmd.status || 'Draft')
-    ? (cmd.status as ArticleStatus)
-    : ArticleStatus.Draft;
+  const statusResult = toArticleStatus(cmd.status || 'Draft');
+  const titleResult = toTitle(cmd.title);
+  const bodyResult = toBody(cmd.body);
 
-  const title = toTitle(cmd.title);
-  const body = toBody(cmd.body);
-
-  return Result.combine([title, body]).map(
-    ([validatedTitle, validatedBody]) => ({
+  return Result.combine([titleResult, bodyResult, statusResult]).map(
+    ([title, body, status]) => ({
       authorId: cmd.authorId,
-      title: validatedTitle,
-      body: validatedBody,
+      title: title,
+      body: body,
       status: status,
     }),
   );

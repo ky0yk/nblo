@@ -1,5 +1,5 @@
 import { ResultAsync, ok } from 'neverthrow';
-import { ArticleStatus, SavedArticle } from '../domain/model/article';
+import { SavedArticle } from '../domain/model/article';
 import createDynamoDBClient from '../infra/client/dynamodb-client';
 import { makeFindArticleById } from '../infra/repository/article/find-article-by-id';
 import {
@@ -7,6 +7,7 @@ import {
   updateArticle,
 } from '../domain/commands/update-article-command';
 import { makeSaveArticle } from '../infra/repository/article/save-article';
+import { ArticleStatus } from '../domain/model/article-status';
 
 interface Input {
   articleId: string;

@@ -1,10 +1,8 @@
 import { Result, err, ok } from 'neverthrow';
-import {
-  ArticleStatus,
-  SavedArticle,
-  ValidatedArticle,
-} from '../model/article';
-import { toBody, toTitle, toValidStatus } from '../model/validators';
+import { SavedArticle, ValidatedArticle } from '../model/article';
+import { toTitle } from '../model/article-title';
+import { toBody } from '../model/article-body';
+import { toValidStatus } from '../model/article-status';
 
 export interface UpdateArticleCommand {
   article: SavedArticle;

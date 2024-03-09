@@ -1,14 +1,9 @@
+import { ArticleBody } from './article-body';
+import { ArticleStatus } from './article-status';
+import { ArticleTitle } from './article-title';
+
 export type ArticleId = string; //uuid
 export type AuthorId = string;
-
-export type ArticleTitle = string & { readonly brand: unique symbol };
-export type ArticleBody = string & { readonly brand: unique symbol };
-
-export enum ArticleStatus {
-  Draft = 'draft',
-  Published = 'published',
-  Private = 'private',
-}
 
 export interface ValidatedArticle {
   articleId?: ArticleId;

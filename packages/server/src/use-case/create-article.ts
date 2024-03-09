@@ -1,11 +1,12 @@
 import { ResultAsync, ok } from 'neverthrow';
-import { ArticleStatus, SavedArticle } from '../domain/model/article';
+import { SavedArticle } from '../domain/model/article';
 import { makeSaveArticle } from '../infra/repository/article/save-article';
 import createDynamoDBClient from '../infra/client/dynamodb-client';
 import {
   createArticle,
   toCreateArticleCommand,
 } from '../domain/commands/create-article-command';
+import { ArticleStatus } from '../domain/model/article-status';
 
 interface Input {
   authorId: string;
