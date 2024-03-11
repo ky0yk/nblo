@@ -6,9 +6,12 @@ import { filterPublishedArticle } from '../domain/services/article-service';
 
 export const getArticleById = (
   articleId: ArticleId,
+  isUserTheAuthor: boolean,
 ): ResultAsync<SavedArticle, Error> => {
   const client = createDynamoDBClient();
   const findArticleById = makeFindArticleById(client);
 
-  return findArticleById(articleId).andThen(filterPublishedArticle);
+  return isUserTheAuthor
+    ? findArticleById(articleId)
+    : findArticleById(articleId).andThen(filterPublishedArticle);
 };
