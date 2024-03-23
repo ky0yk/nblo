@@ -3,7 +3,7 @@ import {
   fetchArticlesByAuthor,
   fetchOwnArticles,
   fetchArticles,
-} from '../infra/repository/article/fetch-articles';
+} from '../infra/ddb-repository/article/fetch-articles';
 
 export type QueryParams = {
   authorId?: AuthorId;
@@ -20,7 +20,7 @@ interface ArticleSummary {
   createdAt: string;
 }
 
-export const listArticles = (params: QueryParams) => {
+export const listArticlesUseCase = (params: QueryParams) => {
   // トークンがあるとき
   if (params.token) {
     return fetchOwnArticles(params).map(toSummary);

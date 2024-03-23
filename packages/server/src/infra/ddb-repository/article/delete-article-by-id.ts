@@ -2,11 +2,12 @@ import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { ResultAsync } from 'neverthrow';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { ArticleId } from '../../../domain/model/article';
+import { DeleteArticleById } from '../../../domain/interface/repository';
 
-const TABLE_NAME = 'Posts';
+const TABLE_NAME = process.env.TABLE_NAME;
 
 export const makeDeleteArticleById = (client: DynamoDBClient) => {
-  return (articleId: ArticleId): ResultAsync<void, Error> => {
+  const deleteArticleById: DeleteArticleById = (articleId) => {
     return ResultAsync.fromPromise(
       client
         .send(
@@ -23,4 +24,6 @@ export const makeDeleteArticleById = (client: DynamoDBClient) => {
         ),
     );
   };
+
+  return deleteArticleById;
 };

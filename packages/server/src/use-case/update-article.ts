@@ -1,13 +1,12 @@
 import { ResultAsync, ok } from 'neverthrow';
 import { SavedArticle } from '../domain/model/article';
-import createDynamoDBClient from '../infra/client/dynamodb-client';
-import { makeFindArticleById } from '../infra/repository/article/find-article-by-id';
 import {
   toUpdateArticleCommand,
   updateArticle,
-} from '../domain/commands/update-article-command';
-import { makeSaveArticle } from '../infra/repository/article/save-article';
+} from '../domain/command/update-article-command';
+
 import { ArticleStatus } from '../domain/model/article-status';
+import { FindArticleById, SaveArticle } from '../domain/interface/repository';
 
 interface Input {
   articleId: string;
@@ -19,14 +18,17 @@ interface Input {
 }
 type UpdateArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
 
-export const updateArticleUseCase: UpdateArticleUseCase = (input) => {
-  const client = createDynamoDBClient();
-  const findArticleById = makeFindArticleById(client);
-  const saveArticle = makeSaveArticle(client);
+export const makeUpdateArticleUseCase = (
+  findArticleById: FindArticleById,
+  saveArticle: SaveArticle,
+) => {
+  const updateArticleUseCase: UpdateArticleUseCase = (input: Input) => {
+    const command = ok(input.articleId)
+      .asyncAndThen(findArticleById)
+      .map((article) => toUpdateArticleCommand(article, input.update));
 
-  const command = ok(input.articleId)
-    .asyncAndThen(findArticleById)
-    .map((article) => toUpdateArticleCommand(article, input.update));
+    return command.andThen(updateArticle).andThen(saveArticle);
+  };
 
-  return command.andThen(updateArticle).andThen(saveArticle);
+  return updateArticleUseCase;
 };

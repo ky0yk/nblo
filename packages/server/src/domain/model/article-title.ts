@@ -1,5 +1,5 @@
 import { Result } from 'neverthrow';
-import { validateLength, validateNoNgWords } from '../services/article-service';
+import { validateLength, validateNoNgWords } from '../service/article-service';
 
 export type ArticleTitle = string & { readonly brand: unique symbol };
 

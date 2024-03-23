@@ -1,6 +1,6 @@
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { ResultAsync } from 'neverthrow';
-import { QueryParams } from '../../../use-case/list-articles';
+import { QueryParams } from '../../../use-case/list-articles-use-case';
 
 const ddbClient = new DynamoDBClient({ region: 'your-region' });
 

@@ -1,22 +1,19 @@
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { ResultAsync, err, ok } from 'neverthrow';
+import { ResultAsync } from 'neverthrow';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { ArticleId, SavedArticle } from '../../../domain/model/article';
+import { SavedArticle } from '../../../domain/model/article';
+import { FindArticleById } from '../../../domain/interface/repository';
 
-const TABLE_NAME = 'Posts';
+const TABLE_NAME = process.env.TABLE_NAME;
 
 export const makeFindArticleById = (client: DynamoDBClient) => {
-  const findArticleById = (
-    articleId: ArticleId,
-  ): ResultAsync<SavedArticle, Error> => {
-    const key = marshall({ articleId: articleId });
-
+  const findArticleById: FindArticleById = (articleId) => {
     return ResultAsync.fromPromise(
       client
         .send(
           new GetItemCommand({
             TableName: TABLE_NAME,
-            Key: key,
+            Key: marshall({ articleId: articleId }),
           }),
         )
         .then((response) => {

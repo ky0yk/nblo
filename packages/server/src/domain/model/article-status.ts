@@ -1,10 +1,12 @@
 import { Result, err, ok } from 'neverthrow';
 
-export enum ArticleStatus {
-  Draft = 'draft',
-  Published = 'published',
-  Private = 'private',
-}
+export const ArticleStatus = {
+  Draft: 'draft', // 下書き
+  Published: 'published', // 公開済み
+  Private: 'private', // 非公開
+} as const;
+
+export type ArticleStatus = (typeof ArticleStatus)[keyof typeof ArticleStatus];
 
 export const toArticleStatus = (value: string): Result<ArticleStatus, Error> =>
   Object.values(ArticleStatus).includes(value as ArticleStatus)
@@ -15,14 +17,13 @@ const canChangeStatus = (
   currentStatus: ArticleStatus,
   newStatus: ArticleStatus,
 ): boolean => {
-  //NOTE: 一度「公開済み」になった記事は、「下書き」に戻すことができない
-  const allowedTransitions = {
+  const allowedTransitions: { [K in ArticleStatus]?: ArticleStatus[] } = {
     [ArticleStatus.Draft]: [ArticleStatus.Published],
     [ArticleStatus.Published]: [ArticleStatus.Private],
     [ArticleStatus.Private]: [ArticleStatus.Published],
   };
 
-  return allowedTransitions[currentStatus].includes(newStatus);
+  return allowedTransitions[currentStatus]?.includes(newStatus) ?? false;
 };
 
 export const toValidStatus = (

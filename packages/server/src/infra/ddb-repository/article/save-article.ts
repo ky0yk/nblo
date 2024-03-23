@@ -1,17 +1,12 @@
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { ResultAsync } from 'neverthrow';
-import { SavedArticle, ValidatedArticle } from '../../../domain/model/article';
 import { v4 as uuidv4 } from 'uuid';
 import { marshall } from '@aws-sdk/util-dynamodb';
+import { SaveArticle } from '../../../domain/interface/repository';
 
-const TABLE_NAME = 'Posts';
-
-export type saveArticle = (
-  model: ValidatedArticle,
-) => ResultAsync<SavedArticle, Error>;
-
+const TABLE_NAME = process.env.TABLE_NAME;
 export const makeSaveArticle = (client: DynamoDBClient) => {
-  const saveArticle: saveArticle = (model) => {
+  const saveArticle: SaveArticle = (model) => {
     const articleId = model.articleId ? model.articleId : uuidv4();
     const article = {
       ...model,
