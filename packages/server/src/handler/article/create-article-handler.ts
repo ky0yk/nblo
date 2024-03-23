@@ -4,16 +4,19 @@ import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case
 import { createArticleSchema } from './schema';
 import { makeSaveArticle } from '../../infra/ddb-repository/article/save-article';
 import createDynamoDBClient from '../../infra/client/dynamodb-client';
+import { validateWithSchema } from '../validator';
 
 export const createArticleHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
+  console.log(req.body);
   const body = validateWithSchema(createArticleSchema, req.body);
+  console.log(body);
 
   if (body.isErr()) {
-    return handleError(body.error);
+    return res.status(400).json(body.error.message);
   }
 
   const input = {

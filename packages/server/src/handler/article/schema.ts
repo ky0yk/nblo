@@ -10,7 +10,9 @@ export const createArticleSchema = z.object({
 export const updateArticleSchema = z.object({
   title: z.string().optional(),
   body: z.string().optional(),
-  status: z.enum(['draft', 'published']).optional(),
+  status: z.enum(['draft', 'published', 'private']).optional(),
 });
 
-export const articleIdSchema = z.string().ulid();
+export const articleIdSchema = z.object({
+  articleId: z.string().uuid(),
+});

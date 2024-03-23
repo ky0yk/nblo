@@ -1,7 +1,10 @@
 import { ResultAsync } from 'neverthrow';
 import { ArticleId, SavedArticle, ValidatedArticle } from '../model/article';
 
-export type DeleteArticleById = (model: ArticleId) => ResultAsync<void, Error>;
+export type DeleteArticleById = (model: {
+  authorId: string;
+  articleId: ArticleId;
+}) => ResultAsync<void, Error>;
 
 export type FindArticleById = (
   model: ArticleId,

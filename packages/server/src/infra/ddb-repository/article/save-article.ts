@@ -7,6 +7,7 @@ import { SaveArticle } from '../../../domain/interface/repository';
 const TABLE_NAME = process.env.TABLE_NAME;
 export const makeSaveArticle = (client: DynamoDBClient) => {
   const saveArticle: SaveArticle = (model) => {
+    console.log(TABLE_NAME);
     const articleId = model.articleId ? model.articleId : uuidv4();
     const article = {
       ...model,

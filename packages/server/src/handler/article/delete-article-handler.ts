@@ -18,7 +18,7 @@ export const deleteArticleHandler = async (
   }
 
   const input = {
-    articleId: articleId.value,
+    ...articleId.value,
   };
 
   const client = createDynamoDBClient();
@@ -27,7 +27,7 @@ export const deleteArticleHandler = async (
   );
 
   return await deleteArticleUseCase(input).match(
-    (_) => res.status(204),
+    (_) => res.status(204).send(),
     (error: Error) => handleError(error),
   );
 };

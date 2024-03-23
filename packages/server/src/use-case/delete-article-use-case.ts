@@ -1,5 +1,5 @@
 import { DeleteArticleById } from '../domain/interface/repository';
-import { ArticleId, SavedArticle } from '../domain/model/article';
+import { ArticleId } from '../domain/model/article';
 import { ResultAsync } from 'neverthrow';
 
 interface Input {
@@ -11,10 +11,9 @@ type DeleteArticleUseCase = (input: Input) => ResultAsync<void, Error>;
 export const makeDeleteArticleUseCase = (
   deleteArticleById: DeleteArticleById,
 ) => {
-  const deleteArticleUseCase: DeleteArticleUseCase = (
-    input,
-  ): ResultAsync<void, Error> => {
-    return deleteArticleById(input.articleId);
+  const deleteArticleUseCase: DeleteArticleUseCase = (input) => {
+    console.log('delete usecase');
+    return deleteArticleById({ authorId: '1', articleId: input.articleId });
   };
 
   return deleteArticleUseCase;

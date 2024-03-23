@@ -11,9 +11,10 @@ type GetArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
 
 export const makeGetArticleUseCase = (findArticleById: FindArticleById) => {
   const getArticleUseCase: GetArticleUseCase = (input) => {
+    console.log(input);
     const { articleId, isUserTheAuthor } = input;
 
-    return isUserTheAuthor
+    return true
       ? findArticleById(articleId)
       : findArticleById(articleId).andThen(filterPublishedArticle);
   };

@@ -7,7 +7,7 @@ import { makeFindArticleById } from '../../infra/ddb-repository/article/find-art
 import { makeSaveArticle } from '../../infra/ddb-repository/article/save-article';
 import { validateWithSchema } from '../validator';
 
-export const updateArticleHandler = (
+export const updateArticleHandler = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -20,7 +20,7 @@ export const updateArticleHandler = (
   }
 
   const input = {
-    articleId: articleId.value,
+    ...articleId.value,
     update: body.value,
   };
 
@@ -30,7 +30,7 @@ export const updateArticleHandler = (
     makeSaveArticle(client),
   );
 
-  return updateArticleUseCase(input).match(
+  return await updateArticleUseCase(input).match(
     (article) => res.status(201).json(article),
     (error: Error) => handleError(error),
   );

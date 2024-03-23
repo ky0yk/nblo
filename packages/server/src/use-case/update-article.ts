@@ -22,7 +22,7 @@ export const makeUpdateArticleUseCase = (
   findArticleById: FindArticleById,
   saveArticle: SaveArticle,
 ) => {
-  const updateArticleUseCase: UpdateArticleUseCase = (input: Input) => {
+  const updateArticleUseCase: UpdateArticleUseCase = (input) => {
     const command = ok(input.articleId)
       .asyncAndThen(findArticleById)
       .map((article) => toUpdateArticleCommand(article, input.update));
