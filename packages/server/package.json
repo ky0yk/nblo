@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "dotenv -e .env ts-node src/handler/handler.ts"
+    "dev": "dotenv -e .env ts-node src/handler/local.ts"
   },
   "keywords": [],
   "author": "",
