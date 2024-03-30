@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { handleError } from './article-error-handler';
 import { articleIdSchema, updateArticleSchema } from './schema';
 import { makeUpdateArticleUseCase } from '../../use-case/update-article';
@@ -7,16 +7,12 @@ import { makeFindArticleById } from '../../infra/article-repository/find-article
 import { makeSaveArticle } from '../../infra/article-repository/save-article';
 import { validateWithSchema } from '../support/validator';
 
-export const updateArticleHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateArticleHandler = async (req: Request, res: Response) => {
   const articleId = validateWithSchema(articleIdSchema, req.params);
   const body = validateWithSchema(updateArticleSchema, req.body);
 
   if (articleId.isErr() || body.isErr()) {
-    return;
+    return res.status(400).send();
   }
 
   const input = {

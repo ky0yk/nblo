@@ -24,7 +24,6 @@ export const makeCreateArticleUseCase = (saveArticle: SaveArticle) => {
       input.status ? input.status : ArticleStatus.Draft,
     );
 
-    console.log(command);
     return ok(command).andThen(createArticle).asyncAndThen(saveArticle);
   };
 

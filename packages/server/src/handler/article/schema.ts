@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 export const createArticleSchema = z.object({
   authorId: z.string(),
   title: z.string(),

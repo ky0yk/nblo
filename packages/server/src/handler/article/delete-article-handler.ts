@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { handleError } from './article-error-handler';
 import { makeDeleteArticleUseCase } from '../../use-case/delete-article-use-case';
 import { articleIdSchema } from './schema';
@@ -6,15 +6,11 @@ import createDynamoDBClient from '../../infra/support/dynamodb-client';
 import { makeDeleteArticleById } from '../../infra/article-repository/delete-article-by-id';
 import { validateWithSchema } from '../support/validator';
 
-export const deleteArticleHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteArticleHandler = async (req: Request, res: Response) => {
   const articleId = validateWithSchema(articleIdSchema, req.params);
 
   if (articleId.isErr()) {
-    return;
+    return res.status(404).send();
   }
 
   const input = {

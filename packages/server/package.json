@@ -1,8 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "private": "true",
   "scripts": {
-    "dev": "dotenv -e .env tsx src/handler/local.ts"
+    "dev": "tsx src/handler/local.ts"
   },
   "keywords": [],
   "author": "",

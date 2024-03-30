@@ -4,11 +4,11 @@ import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { SavedArticle } from '../../domain/article/model/article';
 import { FindArticleById } from '../../domain/article/interface/repository';
 
-const TABLE_NAME = process.env.TABLE_NAME;
-const GSI_NAME = 'ArticleIdIndex';
-
 export const makeFindArticleById = (client: DynamoDBClient) => {
   const findArticleById: FindArticleById = (articleId) => {
+    const TABLE_NAME = process.env.TABLE_NAME;
+    const GSI_NAME = 'ArticleIdIndex';
+
     return ResultAsync.fromPromise(
       client
         .send(
@@ -38,10 +38,3 @@ export const makeFindArticleById = (client: DynamoDBClient) => {
 
   return findArticleById;
 };
-
-// aws dynamodb query \
-//     --table-name Articles \
-//     --index-name ArticleIdIndex \
-//     --key-condition-expression "articleId = :articleId" \
-//     --expression-attribute-values '{":articleId":{"S":"<ArticleId>"}}' \
-//     --endpoint-url http://localhost:8000

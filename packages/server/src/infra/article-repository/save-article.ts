@@ -4,10 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { SaveArticle } from '../../domain/article/interface/repository';
 
-const TABLE_NAME = process.env.TABLE_NAME;
 export const makeSaveArticle = (client: DynamoDBClient) => {
   const saveArticle: SaveArticle = (model) => {
-    console.log(TABLE_NAME);
+    const TABLE_NAME = process.env.TABLE_NAME;
+
     const articleId = model.articleId ? model.articleId : uuidv4();
     const article = {
       ...model,

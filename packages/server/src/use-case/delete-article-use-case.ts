@@ -12,7 +12,6 @@ export const makeDeleteArticleUseCase = (
   deleteArticleById: DeleteArticleById,
 ) => {
   const deleteArticleUseCase: DeleteArticleUseCase = (input) => {
-    console.log('delete usecase');
     return deleteArticleById({ authorId: '1', articleId: input.articleId });
   };
 

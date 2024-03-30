@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { handleError } from './article-error-handler';
 import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case';
 import { createArticleSchema } from './schema';
@@ -6,11 +6,7 @@ import { makeSaveArticle } from '../../infra/article-repository/save-article';
 import createDynamoDBClient from '../../infra/support/dynamodb-client';
 import { validateWithSchema } from '../support/validator';
 
-export const createArticleHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const createArticleHandler = async (req: Request, res: Response) => {
   console.log(req.body);
   const body = validateWithSchema(createArticleSchema, req.body);
   console.log(body);
