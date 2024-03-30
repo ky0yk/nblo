@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { handleError } from './article-error-handler';
 import { articleIdSchema, updateArticleSchema } from './schema';
 import { makeUpdateArticleUseCase } from '../../use-case/update-article';
-import createDynamoDBClient from '../../infra/client/dynamodb-client';
-import { makeFindArticleById } from '../../infra/ddb-repository/article/find-article-by-id';
-import { makeSaveArticle } from '../../infra/ddb-repository/article/save-article';
-import { validateWithSchema } from '../validator';
+import createDynamoDBClient from '../../infra/support/dynamodb-client';
+import { makeFindArticleById } from '../../infra/article-repository/find-article-by-id';
+import { makeSaveArticle } from '../../infra/article-repository/save-article';
+import { validateWithSchema } from '../support/validator';
 
 export const updateArticleHandler = async (
   req: Request,

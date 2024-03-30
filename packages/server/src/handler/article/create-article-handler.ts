@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { handleError } from './article-error-handler';
 import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case';
 import { createArticleSchema } from './schema';
-import { makeSaveArticle } from '../../infra/ddb-repository/article/save-article';
-import createDynamoDBClient from '../../infra/client/dynamodb-client';
-import { validateWithSchema } from '../validator';
+import { makeSaveArticle } from '../../infra/article-repository/save-article';
+import createDynamoDBClient from '../../infra/support/dynamodb-client';
+import { validateWithSchema } from '../support/validator';
 
 export const createArticleHandler = async (
   req: Request,

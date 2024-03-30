@@ -1,7 +1,7 @@
-import { ArticleId, SavedArticle } from '../domain/model/article';
+import { ArticleId, SavedArticle } from '../domain/article/model/article';
 import { ResultAsync } from 'neverthrow';
-import { filterPublishedArticle } from '../domain/service/article-service';
-import { FindArticleById } from '../domain/interface/repository';
+import { filterPublishedArticle } from '../domain/article/service/article-service';
+import { FindArticleById } from '../domain/article/interface/repository';
 
 interface Input {
   articleId: ArticleId;

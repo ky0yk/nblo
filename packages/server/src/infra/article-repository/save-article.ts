@@ -2,7 +2,7 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { ResultAsync } from 'neverthrow';
 import { v4 as uuidv4 } from 'uuid';
 import { marshall } from '@aws-sdk/util-dynamodb';
-import { SaveArticle } from '../../../domain/interface/repository';
+import { SaveArticle } from '../../domain/article/interface/repository';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 export const makeSaveArticle = (client: DynamoDBClient) => {

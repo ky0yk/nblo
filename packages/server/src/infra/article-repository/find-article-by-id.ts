@@ -1,8 +1,8 @@
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { ResultAsync } from 'neverthrow';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { SavedArticle } from '../../../domain/model/article';
-import { FindArticleById } from '../../../domain/interface/repository';
+import { SavedArticle } from '../../domain/article/model/article';
+import { FindArticleById } from '../../domain/article/interface/repository';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const GSI_NAME = 'ArticleIdIndex';

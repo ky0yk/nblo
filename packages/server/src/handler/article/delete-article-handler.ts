@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { handleError } from './article-error-handler';
 import { makeDeleteArticleUseCase } from '../../use-case/delete-article-use-case';
 import { articleIdSchema } from './schema';
-import createDynamoDBClient from '../../infra/client/dynamodb-client';
-import { makeDeleteArticleById } from '../../infra/ddb-repository/article/delete-article-by-id';
-import { validateWithSchema } from '../validator';
+import createDynamoDBClient from '../../infra/support/dynamodb-client';
+import { makeDeleteArticleById } from '../../infra/article-repository/delete-article-by-id';
+import { validateWithSchema } from '../support/validator';
 
 export const deleteArticleHandler = async (
   req: Request,
