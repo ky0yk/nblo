@@ -1,9 +1,7 @@
 import { config } from 'dotenv';
-import { buildApp } from './app';
+import { buildApp } from './build-app';
 
 config();
-console.log('start');
-console.log(process.env.TABLE_NAME);
 
 const app = buildApp();
 

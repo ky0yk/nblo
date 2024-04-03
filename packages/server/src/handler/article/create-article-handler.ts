@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
-import { handleError } from './article-error-handler';
+import { handleArticleError } from './handle-artilce-error';
 import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case';
-import { createArticleSchema } from './schema';
-import { makeSaveArticle } from '../../infra/article-repository/save-article';
-import createDynamoDBClient from '../../infra/support/dynamodb-client';
-import { validateWithSchema } from '../support/validator';
+import { z } from 'zod';
 
-export const createArticleHandler = async (req: Request, res: Response) => {
-  console.log(req.body);
+import { makeSaveArticle } from '../../infra/article-repository/save-article';
+import { validateWithSchema } from '../support/validator';
+import { createArticleSchema } from './schema/article-schema';
+
+export const createArticleHandler = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const body = validateWithSchema(createArticleSchema, req.body);
-  console.log(body);
 
   if (body.isErr()) {
     return res.status(400).json(body.error.message);
@@ -19,13 +21,12 @@ export const createArticleHandler = async (req: Request, res: Response) => {
     ...body.value,
   };
 
-  const client = createDynamoDBClient();
   const createArticleUseCase = makeCreateArticleUseCase(
-    makeSaveArticle(client),
+    makeSaveArticle(req.context.client),
   );
 
   return await createArticleUseCase(input).match(
     (article) => res.status(201).json(article),
-    (error: Error) => handleError(error),
+    (error: Error) => handleArticleError(res, error),
   );
 };

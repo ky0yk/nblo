@@ -1,5 +1,4 @@
 import { Result } from 'neverthrow';
-
 import { ValidatedArticle } from '../model/article';
 import { toArticleStatus } from '../model/article-status';
 import { toTitle } from '../model/article-title';

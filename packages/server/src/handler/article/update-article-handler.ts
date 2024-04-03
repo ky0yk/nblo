@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
-import { handleError } from './article-error-handler';
-import { articleIdSchema, updateArticleSchema } from './schema';
+import { handleArticleError } from './handle-artilce-error';
 import { makeUpdateArticleUseCase } from '../../use-case/update-article';
-import createDynamoDBClient from '../../infra/support/dynamodb-client';
 import { makeFindArticleById } from '../../infra/article-repository/find-article-by-id';
 import { makeSaveArticle } from '../../infra/article-repository/save-article';
 import { validateWithSchema } from '../support/validator';
+import { articleIdSchema, updateArticleSchema } from './schema/article-schema';
 
-export const updateArticleHandler = async (req: Request, res: Response) => {
+export const updateArticleHandler = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const articleId = validateWithSchema(articleIdSchema, req.params);
   const body = validateWithSchema(updateArticleSchema, req.body);
+
+  const client = req.context.client;
 
   if (articleId.isErr() || body.isErr()) {
     return res.status(400).send();
@@ -20,7 +24,6 @@ export const updateArticleHandler = async (req: Request, res: Response) => {
     update: body.value,
   };
 
-  const client = createDynamoDBClient();
   const updateArticleUseCase = makeUpdateArticleUseCase(
     makeFindArticleById(client),
     makeSaveArticle(client),
@@ -28,6 +31,6 @@ export const updateArticleHandler = async (req: Request, res: Response) => {
 
   return await updateArticleUseCase(input).match(
     (article) => res.status(201).json(article),
-    (error: Error) => handleError(error),
+    (error: Error) => handleArticleError(res, error),
   );
 };

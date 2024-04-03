@@ -1,29 +1,27 @@
-import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { ResultAsync } from 'neverthrow';
 import { DeleteArticleById } from '../../domain/article/interface/repository';
+import { DynamoDbResultClient } from '../support/dynamodb-result-client';
+import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb';
 
-export const makeDeleteArticleById = (client: DynamoDBClient) => {
+export const makeDeleteArticleById = (
+  ddbResultClient: DynamoDbResultClient,
+) => {
   const deleteArticleById: DeleteArticleById = ({ authorId, articleId }) => {
     const TABLE_NAME = process.env.TABLE_NAME;
 
-    return ResultAsync.fromPromise(
-      client
-        .send(
-          new DeleteItemCommand({
-            TableName: TABLE_NAME,
-            Key: {
-              authorId: { S: authorId },
-              articleId: { S: articleId },
-            },
-          }),
-        )
-        .then(() => void 0),
-      (error: any) =>
-        new Error(
-          'Failed to delete the article: ' +
-            (error.message || error.toString()),
-        ),
-    );
+    const input: DeleteCommandInput = {
+      TableName: TABLE_NAME,
+      Key: {
+        authorId: authorId,
+        articleId: articleId,
+      },
+    };
+
+    return ddbResultClient
+      .deleteItem(input)
+      .map(() => {})
+      .mapErr(
+        (error) => new Error(`Failed to delete the article: ${error.message}`),
+      );
   };
 
   return deleteArticleById;

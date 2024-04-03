@@ -2,6 +2,7 @@ import { DynamoDBClient, DeleteTableCommand } from '@aws-sdk/client-dynamodb';
 import 'dotenv/config';
 
 const client = new DynamoDBClient({
+  region: process.env.AWS_REGION || 'ap-northeast-1',
   endpoint: 'http://localhost:8000',
 });
 

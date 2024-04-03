@@ -5,6 +5,6 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ) => {
-  req.context = { userId: '1' }; // 動作確認用
+  req.context.userId = '1'; // 動作確認用
   next();
 };

@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { makeGetArticleUseCase } from '../../use-case/get-article-use-case';
-import { handleError } from './article-error-handler';
-import { articleIdSchema } from './schema';
-import createDynamoDBClient from '../../infra/support/dynamodb-client';
+import { handleArticleError } from './handle-artilce-error';
+import { articleIdSchema } from './schema/article-schema';
 import { makeFindArticleById } from '../../infra/article-repository/find-article-by-id';
 import { validateWithSchema } from '../support/validator';
 
-export const getArticleHandler = async (req: Request, res: Response) => {
+export const getArticleHandler = async (
+  req: Request,
+  res: Response,
+): Promise<Response> => {
   const articleId = validateWithSchema(articleIdSchema, req.params);
 
   if (articleId.isErr()) {
@@ -17,13 +19,12 @@ export const getArticleHandler = async (req: Request, res: Response) => {
     ...articleId.value,
   };
 
-  const client = createDynamoDBClient();
   const getArticleByIdUseCase = makeGetArticleUseCase(
-    makeFindArticleById(client),
+    makeFindArticleById(req.context.client),
   );
 
   return await getArticleByIdUseCase(input).match(
     (article) => res.status(200).json(article),
-    (error: Error) => handleError(error),
+    (error: Error) => handleArticleError(res, error),
   );
 };
