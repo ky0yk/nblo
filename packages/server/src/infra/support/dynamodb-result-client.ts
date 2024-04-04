@@ -104,7 +104,6 @@ export class DynamoDbResultClient {
       $metadata: {},
     },
   ): ResultAsync<QueryCommandOutput, Error> {
-    console.log(input);
     if (limit <= 0) {
       okAsync(accumulatedResults);
     }
