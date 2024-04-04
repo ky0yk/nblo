@@ -5,7 +5,7 @@ import {
 import { ArticleStatus } from '../domain/article/model/article-status';
 import { ResultAsync, ok } from 'neverthrow';
 import { SavedArticle } from '../domain/article/model/article';
-import { SaveArticle } from '../domain/article/interface/repository';
+import { SaveArticle } from '../domain/article/interface/article-repository';
 
 interface Input {
   authorId: string;

@@ -1,4 +1,4 @@
-import { DeleteArticleById } from '../../domain/article/interface/repository';
+import { DeleteArticleById } from '../../domain/article/interface/article-repository';
 import { DynamoDbResultClient } from '../support/dynamodb-result-client';
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb';
 

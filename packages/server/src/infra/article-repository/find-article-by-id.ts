@@ -1,7 +1,7 @@
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { SavedArticle } from '../../domain/article/model/article';
-import { FindArticleById } from '../../domain/article/interface/repository';
+import { FindArticleById } from '../../domain/article/interface/article-repository';
 import { DynamoDbResultClient } from '../support/dynamodb-result-client';
 
 export const makeFindArticleById = (client: DynamoDbResultClient) => {

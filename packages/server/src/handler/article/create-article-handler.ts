@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { handleArticleError } from './handle-artilce-error';
 import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case';
-import { z } from 'zod';
 
 import { makeSaveArticle } from '../../infra/article-repository/save-article';
 import { validateWithSchema } from '../support/validator';

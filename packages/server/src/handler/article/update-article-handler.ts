@@ -30,7 +30,7 @@ export const updateArticleHandler = async (
   );
 
   return await updateArticleUseCase(input).match(
-    (article) => res.status(201).json(article),
+    (article) => res.status(200).json(article),
     (error: Error) => handleArticleError(res, error),
   );
 };

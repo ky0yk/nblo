@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 
-import { SaveArticle } from '@/domain/article/interface/repository';
+import { SaveArticle } from '@/domain/article/interface/article-repository';
 import { DynamoDbResultClient } from '../support/dynamodb-result-client';
 
 export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {

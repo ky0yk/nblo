@@ -9,7 +9,7 @@ import { ArticleStatus } from '../domain/article/model/article-status';
 import {
   FindArticleById,
   SaveArticle,
-} from '../domain/article/interface/repository';
+} from '../domain/article/interface/article-repository';
 
 interface Input {
   articleId: string;
