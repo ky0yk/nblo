@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { handleArticleError } from './handle-artilce-error';
-import { makeDeleteArticleUseCase } from '../../use-case/delete-article-use-case';
-import { makeDeleteArticleById } from '../../infra/article-repository/delete-article-by-id';
-import { validateWithSchema } from '../support/validator';
-import { articleIdSchema } from './schema/article-schema';
+import { makeDeleteArticleUseCase } from '../../../use-case/author/article/delete-article-use-case';
+import { makeDeleteArticleById } from '../../../infra/repository/article-ddb-repository/delete-article-by-id';
+import { validateWithSchema } from '../../shared/validator/validator';
+import { articleIdSchema } from '../schema/author-article-schema';
 export const deleteArticleHandler = async (
   req: Request,
   res: Response,

@@ -1,6 +1,6 @@
 import serverlessExpress from '@codegenie/serverless-express';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { buildApp } from './build-app';
+import { buildApp } from './app';
 
 let serverlessExpressInstance: ReturnType<
   typeof serverlessExpress<APIGatewayProxyEvent>

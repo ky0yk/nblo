@@ -1,5 +1,5 @@
-import { DeleteArticleById } from '../domain/article/interface/article-repository';
-import { ArticleId } from '../domain/article/model/article';
+import { DeleteArticleById } from '../../../domain/article/interface/article-repository';
+import { ArticleId } from '../../../domain/article/model/article';
 import { ResultAsync } from 'neverthrow';
 
 interface Input {

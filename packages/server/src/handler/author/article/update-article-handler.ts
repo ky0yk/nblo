@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
 import { handleArticleError } from './handle-artilce-error';
-import { makeUpdateArticleUseCase } from '../../use-case/update-article';
-import { makeFindArticleById } from '../../infra/article-repository/find-article-by-id';
-import { makeSaveArticle } from '../../infra/article-repository/save-article';
-import { validateWithSchema } from '../support/validator';
-import { articleIdSchema, updateArticleSchema } from './schema/article-schema';
+import { makeUpdateArticleUseCase } from '../../../use-case/author/article/update-article';
+import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
+import { makeSaveArticle } from '../../../infra/repository/article-ddb-repository/save-article';
+import { validateWithSchema } from '../../shared/validator/validator';
+import {
+  articleIdSchema,
+  updateArticleSchema,
+} from '../schema/author-article-schema';
 
 export const updateArticleHandler = async (
   req: Request,

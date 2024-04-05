@@ -1,5 +1,5 @@
-import { DeleteArticleById } from '../../domain/article/interface/article-repository';
-import { DynamoDbResultClient } from '../support/dynamodb-result-client';
+import { DeleteArticleById } from '../../../domain/article/interface/article-repository';
+import { DynamoDbResultClient } from '../../shared/dynamodb-result-client';
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb';
 
 export const makeDeleteArticleById = (

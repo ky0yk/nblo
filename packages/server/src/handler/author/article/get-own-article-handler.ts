@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { makeGetArticleUseCase } from '../../use-case/get-article-use-case';
+import { makeGetOwnArticleUseCase } from '../../../use-case/author/article/get-own-article-use-case';
 import { handleArticleError } from './handle-artilce-error';
-import { articleIdSchema } from './schema/article-schema';
-import { makeFindArticleById } from '../../infra/article-repository/find-article-by-id';
-import { validateWithSchema } from '../support/validator';
+import { articleIdSchema } from '../schema/author-article-schema';
+import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
+import { validateWithSchema } from '../../shared/validator/validator';
 
-export const getArticleHandler = async (
+export const getOwnArticleHandler = async (
   req: Request,
   res: Response,
 ): Promise<Response> => {
@@ -19,7 +19,7 @@ export const getArticleHandler = async (
     ...articleId.value,
   };
 
-  const getArticleByIdUseCase = makeGetArticleUseCase(
+  const getArticleByIdUseCase = makeGetOwnArticleUseCase(
     makeFindArticleById(req.context.client),
   );
 

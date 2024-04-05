@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": "true",
   "scripts": {
-    "dev": "tsx src/handler/local.ts"
+    "dev-author": "tsx src/handler/author/express/local.ts",
+    "dev-visitor": "tsx src/handler/visitor/express/local.ts"
   },
   "keywords": [],
   "author": "",

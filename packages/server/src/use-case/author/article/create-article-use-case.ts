@@ -1,11 +1,11 @@
 import {
   createArticle,
   toCreateArticleCommand,
-} from '../domain/article/command/create-article-command';
-import { ArticleStatus } from '../domain/article/model/article-status';
+} from '../../../domain/article/command/create-article-command';
+import { ArticleStatus } from '../../../domain/article/model/article-status';
 import { ResultAsync, ok } from 'neverthrow';
-import { SavedArticle } from '../domain/article/model/article';
-import { SaveArticle } from '../domain/article/interface/article-repository';
+import { SavedArticle } from '../../../domain/article/model/article';
+import { SaveArticle } from '../../../domain/article/interface/article-repository';
 
 interface Input {
   authorId: string;

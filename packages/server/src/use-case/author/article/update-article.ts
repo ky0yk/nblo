@@ -1,15 +1,15 @@
 import { ResultAsync, ok } from 'neverthrow';
-import { SavedArticle } from '../domain/article/model/article';
+import { SavedArticle } from '../../../domain/article/model/article';
 import {
   toUpdateArticleCommand,
   updateArticle,
-} from '../domain/article/command/update-article-command';
+} from '../../../domain/article/command/update-article-command';
 
-import { ArticleStatus } from '../domain/article/model/article-status';
+import { ArticleStatus } from '../../../domain/article/model/article-status';
 import {
   FindArticleById,
   SaveArticle,
-} from '../domain/article/interface/article-repository';
+} from '../../../domain/article/interface/article-repository';
 
 interface Input {
   articleId: string;

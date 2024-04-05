@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { handleArticleError } from './handle-artilce-error';
-import { makeCreateArticleUseCase } from '../../use-case/create-article-use-case';
-
-import { makeSaveArticle } from '../../infra/article-repository/save-article';
-import { validateWithSchema } from '../support/validator';
-import { createArticleSchema } from './schema/article-schema';
+import { makeCreateArticleUseCase } from '../../../use-case/author/article/create-article-use-case';
+import { makeSaveArticle } from '../../../infra/repository/article-ddb-repository/save-article';
+import { validateWithSchema } from '../../shared/validator/validator';
+import { createArticleSchema } from '../schema/author-article-schema';
 
 export const createArticleHandler = async (
   req: Request,
