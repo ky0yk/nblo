@@ -4,7 +4,8 @@
   "private": "true",
   "scripts": {
     "dev-author": "tsx src/handler/author/express/local.ts",
-    "dev-visitor": "tsx src/handler/visitor/express/local.ts"
+    "dev-visitor": "tsx src/handler/visitor/express/local.ts",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -13,12 +14,15 @@
     "@jest/types": "^29.6.3",
     "@types/aws-lambda": "^8.10.136",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/parser": "^7.1.1",
     "dotenv-cli": "^7.4.1",
     "eslint": "^8.57.0",
     "eslint-plugin-neverthrow": "^1.1.4",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.529.1",

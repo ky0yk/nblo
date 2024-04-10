@@ -11,6 +11,5 @@ export const toBody = (body: string): Result<ArticleBody, Error> => {
 
   return validateLengthRange(body)
     .andThen(() => validateNoNgWords(body))
-    .mapErr(() => new Error(`Body validation Error`))
     .map(() => body as ArticleBody);
 };

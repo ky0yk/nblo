@@ -19,11 +19,11 @@ export const getOwnArticleHandler = async (
     ...articleId.value,
   };
 
-  const getArticleByIdUseCase = makeGetOwnArticleUseCase(
+  const getOwnArticleUseCase = makeGetOwnArticleUseCase(
     makeFindArticleById(req.context.client),
   );
 
-  return await getArticleByIdUseCase(input).match(
+  return await getOwnArticleUseCase(input).match(
     (article) => res.status(200).json(article),
     (error: Error) => handleArticleError(res, error),
   );

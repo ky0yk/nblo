@@ -1,5 +1,8 @@
 import { Result, err, ok } from 'neverthrow';
 
+export class InvalidArticleStatusError extends Error {}
+export class InvalidStatusTransitionError extends Error {}
+
 export const ArticleStatus = {
   Draft: 'draft', // 下書き
   Published: 'published', // 公開済み
@@ -11,7 +14,7 @@ export type ArticleStatus = (typeof ArticleStatus)[keyof typeof ArticleStatus];
 export const toArticleStatus = (value: string): Result<ArticleStatus, Error> =>
   Object.values(ArticleStatus).includes(value as ArticleStatus)
     ? ok(value as ArticleStatus)
-    : err(new Error('Invalid article status'));
+    : err(new InvalidArticleStatusError('Invalid article status'));
 
 const canChangeStatus = (
   currentStatus: ArticleStatus,
@@ -26,7 +29,7 @@ const canChangeStatus = (
   return allowedTransitions[currentStatus]?.includes(newStatus) ?? false;
 };
 
-export const toValidStatus = (
+export const validStatusTransition = (
   currentStatus: ArticleStatus,
   newStatusInput: string,
 ): Result<ArticleStatus, Error> => {
@@ -34,7 +37,7 @@ export const toValidStatus = (
 
   return newStatusResult.andThen((newStatus) => {
     if (!canChangeStatus(currentStatus, newStatus)) {
-      return err(new Error('Invalid status transition'));
+      return err(new InvalidStatusTransitionError('Invalid status transition'));
     }
 
     return ok(newStatus);

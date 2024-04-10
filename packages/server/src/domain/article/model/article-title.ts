@@ -11,6 +11,5 @@ export const toTitle = (title: string): Result<ArticleTitle, Error> => {
 
   return validateLengthRange(title)
     .andThen(() => validateNoNgWords(title))
-    .mapErr(() => new Error(`Title validation Error`))
     .map(() => title as ArticleTitle);
 };

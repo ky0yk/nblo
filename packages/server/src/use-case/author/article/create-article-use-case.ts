@@ -21,7 +21,7 @@ export const makeCreateArticleUseCase = (saveArticle: SaveArticle) => {
       input.authorId,
       input.title,
       input.body,
-      input.status ? input.status : ArticleStatus.Draft,
+      input.status,
     );
 
     return ok(command).andThen(createArticle).asyncAndThen(saveArticle);

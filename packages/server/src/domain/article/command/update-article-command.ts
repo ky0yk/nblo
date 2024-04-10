@@ -2,7 +2,9 @@ import { Result, err, ok } from 'neverthrow';
 import { SavedArticle, ValidatedArticle } from '../model/article';
 import { toTitle } from '../model/article-title';
 import { toBody } from '../model/article-body';
-import { toValidStatus } from '../model/article-status';
+import { validStatusTransition } from '../model/article-status';
+
+export class UpdateDataEmptyError extends Error {}
 
 export interface UpdateArticleCommand {
   article: SavedArticle;
@@ -35,18 +37,16 @@ export const updateArticle = (
   cmd: UpdateArticleCommand,
 ): Result<ValidatedArticle, Error> => {
   if (isUpdateEmpty(cmd.update)) {
-    return err(new Error('Update data is empty'));
+    return err(new UpdateDataEmptyError('Update data is empty'));
   }
+  const { title: newTitle, body: newBody, status: newStatus } = cmd.update;
+  const { title: oldTitle, body: oldBody, status: oldStatus } = cmd.article;
 
-  const titleResult = cmd.update.title
-    ? toTitle(cmd.update.title)
-    : ok(cmd.article.title);
-  const bodyResult = cmd.update.body
-    ? toBody(cmd.update.body)
-    : ok(cmd.article.body);
-  const statusResult = cmd.update.status
-    ? toValidStatus(cmd.article.status, cmd.update.status)
-    : ok(cmd.article.status);
+  const titleResult = newTitle ? toTitle(newTitle) : ok(oldTitle);
+  const bodyResult = newBody ? toBody(newBody) : ok(oldBody);
+  const statusResult = newStatus
+    ? validStatusTransition(oldStatus, newStatus)
+    : ok(oldStatus);
 
   const validationResult = Result.combine([
     titleResult,
