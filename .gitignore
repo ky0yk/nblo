@@ -2,6 +2,9 @@
 *.d.ts
 node_modules
 
+# Don't ignore the .d.ts file in the types directory
+!packages/server/src/@types/express/index.d.ts
+
 # CDK asset staging directory
 cdk/cdk.staging
 cdk/cdk.out
