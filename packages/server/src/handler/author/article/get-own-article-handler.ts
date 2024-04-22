@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { makeGetOwnArticleUseCase } from '../../../use-case/author/article/get-own-article-use-case';
-import { handleArticleError } from './handle-artilce-error';
+import { handleArticleError } from './handle-article-error';
 import { articleIdSchema } from '../schema/author-article-schema';
-import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
 import { validateWithSchema } from '../../shared/validator/validator';
+import { makeFindArticleById } from '@/infra/repository/article-ddb-repository';
 
 export const getOwnArticleHandler = async (
   req: Request,

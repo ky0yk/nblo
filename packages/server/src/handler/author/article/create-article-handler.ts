@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { handleArticleError } from './handle-artilce-error';
+import { handleArticleError } from './handle-article-error';
 import { makeCreateArticleUseCase } from '../../../use-case/author/article/create-article-use-case';
-import { makeSaveArticle } from '../../../infra/repository/article-ddb-repository/save-article';
 import { validateWithSchema } from '../../shared/validator/validator';
 import { createArticleSchema } from '../schema/author-article-schema';
+import { makeSaveArticle } from '@/infra/repository/article-ddb-repository';
+import { createArticle } from '@/domain/article/command/create-article-command';
 
 export const createArticleHandler = async (
   req: Request,
@@ -20,6 +21,7 @@ export const createArticleHandler = async (
   };
 
   const createArticleUseCase = makeCreateArticleUseCase(
+    createArticle,
     makeSaveArticle(req.context.client),
   );
 

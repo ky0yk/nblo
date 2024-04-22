@@ -25,9 +25,9 @@ export const toCreateArticleCommand = (
   };
 };
 
-export const createArticle = (
-  cmd: CreateArticleCommand,
-): Result<ValidatedArticle, Error> => {
+export type CreateArticle = (cmd: CreateArticleCommand) => Result<ValidatedArticle, Error>;
+
+export const createArticle: CreateArticle = (cmd) => {
   const statusResult = toArticleStatus(cmd.status || ArticleStatus.Draft);
   const titleResult = toTitle(cmd.title);
   const bodyResult = toBody(cmd.body);

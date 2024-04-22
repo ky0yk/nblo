@@ -1,8 +1,8 @@
 import { ResultAsync, ok } from 'neverthrow';
 import { SavedArticle } from '../../../domain/article/model/article';
 import {
+  UpdateArticle,
   toUpdateArticleCommand,
-  updateArticle,
 } from '../../../domain/article/command/update-article-command';
 
 import { ArticleStatus } from '../../../domain/article/model/article-status';
@@ -22,6 +22,7 @@ interface Input {
 type UpdateArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
 
 export const makeUpdateArticleUseCase = (
+  updateArticle: UpdateArticle,
   findArticleById: FindArticleById,
   saveArticle: SaveArticle,
 ) => {

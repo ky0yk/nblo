@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { handleArticleError } from '../../author/article/handle-artilce-error';
+import { handleArticleError } from '../../author/article/handle-article-error';
 import { articleIdSchema } from '../../author/schema/author-article-schema';
 import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
 import { validateWithSchema } from '../../shared/validator/validator';

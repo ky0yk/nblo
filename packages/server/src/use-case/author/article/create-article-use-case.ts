@@ -1,8 +1,7 @@
 import {
-  createArticle,
+  CreateArticle,
   toCreateArticleCommand,
 } from '../../../domain/article/command/create-article-command';
-import { ArticleStatus } from '../../../domain/article/model/article-status';
 import { ResultAsync, ok } from 'neverthrow';
 import { SavedArticle } from '../../../domain/article/model/article';
 import { SaveArticle } from '../../../domain/article/interface/article-repository';
@@ -15,7 +14,7 @@ interface Input {
 }
 type CreateArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
 
-export const makeCreateArticleUseCase = (saveArticle: SaveArticle) => {
+export const makeCreateArticleUseCase = (createArticle: CreateArticle, saveArticle: SaveArticle) => {
   const createArticleUseCase: CreateArticleUseCase = (input) => {
     const command = toCreateArticleCommand(
       input.authorId,

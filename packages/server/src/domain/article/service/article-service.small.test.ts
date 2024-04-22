@@ -6,7 +6,7 @@ import {
   ArticleNotPublishedError,
   ContainsForbiddenWordsError,
   InvalidLengthError,
-  filterPublishedArticle,
+  validatePublishedArticle,
   validateLength,
   validateNoNgWords,
 } from './article-service';
@@ -25,7 +25,7 @@ describe('filterPublishedArticle', () => {
     };
 
     // when
-    const result = filterPublishedArticle(article);
+    const result = validatePublishedArticle(article);
 
     // then
     expect(result.isOk()).toBe(true);
@@ -45,7 +45,7 @@ describe('filterPublishedArticle', () => {
     };
 
     // when
-    const result = filterPublishedArticle(article);
+    const result = validatePublishedArticle(article);
 
     // then
     expect(result.isErr()).toBe(true);

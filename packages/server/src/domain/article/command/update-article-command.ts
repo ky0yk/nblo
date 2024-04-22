@@ -33,9 +33,9 @@ const isUpdateEmpty = (update: UpdateArticleCommand['update']): boolean => {
   return Object.keys(update).length === 0;
 };
 
-export const updateArticle = (
-  cmd: UpdateArticleCommand,
-): Result<ValidatedArticle, Error> => {
+export type UpdateArticle = (cmd: UpdateArticleCommand) => Result<ValidatedArticle, Error>
+
+export const updateArticle:UpdateArticle = (cmd) => {
   if (isUpdateEmpty(cmd.update)) {
     return err(new UpdateDataEmptyError('Update data is empty'));
   }

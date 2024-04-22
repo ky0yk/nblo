@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { handleArticleError } from './handle-artilce-error';
+import { handleArticleError } from './handle-article-error';
 import { makeUpdateArticleUseCase } from '../../../use-case/author/article/update-article';
-import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
-import { makeSaveArticle } from '../../../infra/repository/article-ddb-repository/save-article';
 import { validateWithSchema } from '../../shared/validator/validator';
 import {
   articleIdSchema,
   updateArticleSchema,
 } from '../schema/author-article-schema';
+import { updateArticle } from '@/domain/article/command/update-article-command';
+import { makeFindArticleById, makeSaveArticle } from '@/infra/repository/article-ddb-repository';
 
 export const updateArticleHandler = async (
   req: Request,
@@ -28,6 +28,7 @@ export const updateArticleHandler = async (
   };
 
   const updateArticleUseCase = makeUpdateArticleUseCase(
+    updateArticle,
     makeFindArticleById(client),
     makeSaveArticle(client),
   );
