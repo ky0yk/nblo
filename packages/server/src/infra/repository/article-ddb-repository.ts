@@ -5,9 +5,68 @@ import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DeleteArticleById, FindArticleById, SaveArticle } from '@/domain/article/interface/article-repository';
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { DynamoDbResultClient } from '../shared/dynamodb-result-client';
+import { DynamoDbResultClient } from '../client/dynamodb-result-client';
 import { SavedArticle } from '@/domain/article/model/article';
+import { errAsync, okAsync } from 'neverthrow';
 
+
+export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {
+  const saveArticle: SaveArticle = (model) => {
+    const TABLE_NAME = process.env.TABLE_NAME || 'Articles';
+
+    const articleId = model.articleId ? model.articleId : uuidv4();
+    const article = {
+      ...model,
+      articleId,
+      createdAt: model.createdAt ? model.createdAt : new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const input: PutCommandInput = {
+      TableName: TABLE_NAME,
+      Item: article,
+    };
+
+    return ddbResultClient
+      .putItem(input)
+      .map(() => article)
+      .mapErr(
+        (error) =>
+          new Error('Failed to save the blog article: ' + error.message),
+      );
+  };
+
+  return saveArticle;
+};
+
+export const makeFindArticleById = (client: DynamoDbResultClient) => {
+  const findArticleById: FindArticleById = (articleId) => {
+    const TABLE_NAME = process.env.TABLE_NAME;
+    const GSI_NAME = 'ArticleIdIndex';
+
+    const MAX_QUERY_LIMIT = 10;
+
+    const input: QueryCommandInput = {
+      TableName: TABLE_NAME,
+      IndexName: GSI_NAME,
+      KeyConditionExpression: 'articleId = :articleId',
+      ExpressionAttributeValues: {
+        ':articleId': { S: articleId },
+      },
+    };
+
+    return client
+      .queryRecursively(input, MAX_QUERY_LIMIT)
+      .andThen((queryOutput) => {
+        if (!queryOutput.Items || queryOutput.Items.length === 0) {
+          return errAsync(new Error());
+        }
+        return okAsync(unmarshall(queryOutput.Items[0]) as SavedArticle);
+      })
+  };
+
+  return findArticleById;
+};
 
 
 export const makeDeleteArticleById = (
@@ -33,70 +92,4 @@ export const makeDeleteArticleById = (
   };
 
   return deleteArticleById;
-};
-
-
-export const makeFindArticleById = (client: DynamoDbResultClient) => {
-  const findArticleById: FindArticleById = (articleId) => {
-    const TABLE_NAME = process.env.TABLE_NAME;
-    const GSI_NAME = 'ArticleIdIndex';
-
-    const MAX_QUERY_LIMIT = 10;
-
-    const input: QueryCommandInput = {
-      TableName: TABLE_NAME,
-      IndexName: GSI_NAME,
-      KeyConditionExpression: 'articleId = :articleId',
-      ExpressionAttributeValues: {
-        ':articleId': { S: articleId },
-      },
-    };
-
-    return client
-      .queryRecursively(input, MAX_QUERY_LIMIT)
-      .map((queryOutput) => {
-        if (!queryOutput.Items || queryOutput.Items.length === 0) {
-          throw new Error('Article not found');
-        }
-        return unmarshall(queryOutput.Items[0]) as SavedArticle;
-      })
-      .mapErr(
-        (error) =>
-          new Error(
-            `Failed to get the article: ${error.message || error.toString()}`,
-          ),
-      );
-  };
-
-  return findArticleById;
-};
-
-
-export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {
-  const saveArticle: SaveArticle = (model) => {
-    const TABLE_NAME = process.env.TABLE_NAME || 'Articles';
-
-    const articleId = model.articleId ? model.articleId : uuidv4();
-    const article = {
-      ...model,
-      articleId,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    const input: PutCommandInput = {
-      TableName: TABLE_NAME,
-      Item: article,
-    };
-
-    return ddbResultClient
-      .putItem(input)
-      .map(() => article)
-      .mapErr(
-        (error) =>
-          new Error('Failed to save the blog article: ' + error.message),
-      );
-  };
-
-  return saveArticle;
 };

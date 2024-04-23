@@ -1,4 +1,4 @@
-import { DynamoDbResultClient } from '@/infra/shared/dynamodb-result-client';
+import { DynamoDbResultClient } from '@/infra/client/dynamodb-result-client';
 import { Request, Response, NextFunction } from 'express';
 
 export const initContext = (
