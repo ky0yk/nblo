@@ -6,8 +6,11 @@ import {
   articleIdSchema,
   updateArticleSchema,
 } from '../schema/author-article-schema';
-import { updateArticle } from '@/domain/article/command/update-article-command';
+import { makeUpdateArticle } from '@/domain/article/command/update-article-command';
 import { makeFindArticleById, makeSaveArticle } from '@/infra/repository/article-ddb-repository';
+import { toTitle } from '@/domain/article/model/article-title';
+import { toBody } from '@/domain/article/model/article-body';
+import { validStatusTransition } from '@/domain/article/model/article-status';
 
 export const updateArticleHandler = async (
   req: Request,
@@ -26,6 +29,8 @@ export const updateArticleHandler = async (
     ...articleId.value,
     update: body.value,
   };
+
+  const updateArticle = makeUpdateArticle(toTitle, toBody, validStatusTransition)
 
   const updateArticleUseCase = makeUpdateArticleUseCase(
     updateArticle,

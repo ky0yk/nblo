@@ -1,32 +1,15 @@
-jest.mock('../model/article-title', () => ({
-  toTitle: jest.fn(),
-}));
-jest.mock('../model/article-body', () => ({
-  toBody: jest.fn(),
-}));
-jest.mock('../model/article-status');
+
 
 import { SavedArticle } from '../model/article';
-import { ArticleBody, toBody } from '../model/article-body';
-import { ArticleTitle, toTitle } from '../model/article-title';
-import { setToTitleError, resetToTitleMock } from '../model/article-title.mock';
-import { setToBodyError, resetToBodyMock } from '../model/article-body.mock';
-import { ArticleStatus } from '../model/article-status';
-import {
-  mockToValidStatusError,
-  resetToValidStatusMock,
-} from '../model/article-status.mock';
-import {
-  UpdateDataEmptyError,
-  toUpdateArticleCommand,
-  updateArticle,
-} from './update-article-command';
+import { ArticleBody, ToBody, toBody } from '../model/article-body';
+import { ArticleTitle, ToTitle, toTitle } from '../model/article-title';
+import { ArticleStatus, ValidStatusTransition, validStatusTransition } from '../model/article-status';
+import { UpdateDataEmptyError, makeUpdateArticle, toUpdateArticleCommand } from './update-article-command';
+import { err } from 'neverthrow';
 
 describe('updateArticle', () => {
-  beforeEach(() => {
-    resetToTitleMock();
-    resetToBodyMock();
-    resetToValidStatusMock();
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   test('有効な更新データが提供された場合、更新された記事を返すこと', () => {
@@ -49,13 +32,14 @@ describe('updateArticle', () => {
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, update);
+    const updateArticle = makeUpdateArticle(toTitle, toBody, validStatusTransition)
     const result = updateArticle(cmd);
 
     // then
     expect(result.isOk()).toBe(true);
     const validatedArticle = result._unsafeUnwrap();
-    expect(validatedArticle.title).toBe('Mocked Title');
-    expect(validatedArticle.body).toBe('Mocked Body');
+    expect(validatedArticle.title).toBe(update.title);
+    expect(validatedArticle.body).toBe(update.body);
     expect(validatedArticle.status).toBe(ArticleStatus.Published);
   });
 
@@ -75,7 +59,9 @@ describe('updateArticle', () => {
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, emptyUpdate);
+    const updateArticle = makeUpdateArticle(toTitle, toBody, validStatusTransition)
     const result = updateArticle(cmd);
+
 
     // then
     expect(result.isErr()).toBe(true);
@@ -84,7 +70,6 @@ describe('updateArticle', () => {
 
   test('無効なタイトルが提供された場合、エラーを返すこと', () => {
     // given
-    setToTitleError();
 
     const savedArticle: SavedArticle = {
       articleId: '1',
@@ -98,18 +83,22 @@ describe('updateArticle', () => {
 
     const invalidUpdate = { title: 'invalid-title' };
 
+    const mockToTitle: ToTitle = jest.fn(() => {
+      return err(new Error())
+    })
+
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
+    const updateArticle = makeUpdateArticle(mockToTitle, toBody, validStatusTransition)
     const result = updateArticle(cmd);
 
     // then
-    expect(toTitle).toHaveBeenCalledTimes(1);
+    expect(mockToTitle).toHaveBeenCalledTimes(1);
     expect(result.isErr()).toBe(true);
   });
 
   test('無効な本文が提供された場合、エラーを返すこと', () => {
     // given
-    setToBodyError();
 
     const savedArticle: SavedArticle = {
       articleId: '1',
@@ -120,22 +109,25 @@ describe('updateArticle', () => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
+
+    const mockToBody: ToBody = jest.fn(() => {
+      return err(new Error())
+    })
 
     const invalidUpdate = { body: 'invalid-body' };
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
+    const updateArticle = makeUpdateArticle(toTitle, mockToBody, validStatusTransition)
     const result = updateArticle(cmd);
 
     // then
-    expect(toBody).toHaveBeenCalledTimes(1);
+    expect(mockToBody).toHaveBeenCalledTimes(1);
     expect(result.isErr()).toBe(true);
   });
 
   test('無効なステータスが提供された場合、エラーを返すこと', () => {
     // given
-    mockToValidStatusError();
-
     const savedArticle: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
@@ -146,10 +138,15 @@ describe('updateArticle', () => {
       updatedAt: new Date().toISOString(),
     };
 
+    const mockValidStatusTransition: ValidStatusTransition = jest.fn(() => {
+      return err(new Error())
+    })
+
     const invalidUpdate = { status: 'invalid-status' };
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
+    const updateArticle = makeUpdateArticle(toTitle, toBody, mockValidStatusTransition)
     const result = updateArticle(cmd);
 
     // then

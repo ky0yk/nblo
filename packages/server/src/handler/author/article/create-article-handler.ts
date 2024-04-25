@@ -4,7 +4,10 @@ import { makeCreateArticleUseCase } from '../../../use-case/author/article/creat
 import { validateWithSchema } from '../../shared/validator/validator';
 import { createArticleSchema } from '../schema/author-article-schema';
 import { makeSaveArticle } from '@/infra/repository/article-ddb-repository';
-import { createArticle } from '@/domain/article/command/create-article-command';
+import { makeCreateArticle } from '@/domain/article/command/create-article-command';
+import { toTitle } from '@/domain/article/model/article-title';
+import { toBody } from '@/domain/article/model/article-body';
+import { toArticleStatus } from '@/domain/article/model/article-status';
 
 export const createArticleHandler = async (
   req: Request,
@@ -19,6 +22,8 @@ export const createArticleHandler = async (
   const input = {
     ...body.value,
   };
+
+  const createArticle = makeCreateArticle(toTitle, toBody, toArticleStatus)
 
   const createArticleUseCase = makeCreateArticleUseCase(
     createArticle,

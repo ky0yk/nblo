@@ -1,36 +1,14 @@
 import {
     CreateArticle,
-    toCreateArticleCommand,
   } from '../../../domain/article/command/create-article-command';
-  import { ResultAsync, ok, err, okAsync, errAsync } from 'neverthrow';
+  import { ok, err, okAsync, errAsync } from 'neverthrow';
   import { SavedArticle, ValidatedArticle } from '../../../domain/article/model/article';
   import { SaveArticle } from '../../../domain/article/interface/article-repository';
 import { ArticleTitle } from '@/domain/article/model/article-title';
 import { ArticleBody } from '@/domain/article/model/article-body';
 import { ArticleStatus } from '../../../domain/article/model/article-status';
-  
-  interface Input {
-    authorId: string;
-    title: string;
-    body: string;
-    status?: string;
-  }
-  type CreateArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
-  
-  export const makeCreateArticleUseCase = (createArticle: CreateArticle, saveArticle: SaveArticle) => {
-    const createArticleUseCase: CreateArticleUseCase = (input) => {
-      const command = toCreateArticleCommand(
-        input.authorId,
-        input.title,
-        input.body,
-        input.status,
-      );
-  
-      return ok(command).andThen(createArticle).asyncAndThen(saveArticle);
-    };
-  
-    return createArticleUseCase;
-  };
+import { makeCreateArticleUseCase } from './create-article-use-case';
+
   
   describe('makeCreateArticleUseCase', () => {
     afterEach(() => {

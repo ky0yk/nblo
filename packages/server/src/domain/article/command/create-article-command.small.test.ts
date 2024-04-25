@@ -1,38 +1,80 @@
-import { ArticleStatus } from '../model/article-status';
-import { toCreateArticleCommand } from './create-article-command';
 
-describe('toCreateArticleCommand', () => {
-  test('必須パラメーターが提供され、statusが省略された場合、デフォルトでdraftに設定される', () => {
-    // given
-    const authorId = 'author1';
-    const title = 'Test Title';
-    const body = 'Test Body';
+import { ArticleStatus, ToArticleStatus } from '../model/article-status';
+import { err, ok } from 'neverthrow';
+import { makeCreateArticle, toCreateArticleCommand } from './create-article-command';
+import { ToTitle } from '../model/article-title';
+import { ToBody } from '../model/article-body';
 
-    // when
-    const command = toCreateArticleCommand(authorId, title, body);
-
-    // then
-    expect(command).toEqual({
-      authorId,
-      title,
-      body,
-      status: ArticleStatus.Draft,
-    });
+describe('createArticle', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
-  test('オプショナルなstatusパラメータが提供されたとき、それが返されるオブジェクトに正しく含まれていること', () => {
+  test('有効な作成コマンドが提供された場合、新しい記事を正常に作成すること', () => {
     // given
-    const status = 'public';
+    const cmd = toCreateArticleCommand('author1', 'Valid Title', 'Valid Body');
+
+    const mockToTitle: ToTitle = jest.fn().mockReturnValue(ok('Valid Title'));
+    const mockToBody: ToBody = jest.fn().mockReturnValue(ok('Valid Body'));
+    const mockToArticleStatus: ToArticleStatus = jest.fn().mockReturnValue(ok(ArticleStatus.Draft));
 
     // when
-    const command = toCreateArticleCommand(
-      'author1',
-      'Test Title',
-      'Test Body',
-      status,
-    );
+    const createArticle = makeCreateArticle(mockToTitle, mockToBody, mockToArticleStatus);
+    const result = createArticle(cmd);
 
     // then
-    expect(command).toHaveProperty('status', 'public');
+    expect(result.isOk()).toBe(true);
+    const validatedArticle = result._unsafeUnwrap();
+    expect(validatedArticle.title).toBe('Valid Title');
+    expect(validatedArticle.body).toBe('Valid Body');
+    expect(validatedArticle.status).toBe(ArticleStatus.Draft);
+  });
+
+  test('無効なタイトルが提供された場合、エラーを返すこと', () => {
+    // given
+    const cmd = toCreateArticleCommand('author1', 'Invalid Title', 'Valid Body');
+
+    const mockToTitle: ToTitle = jest.fn().mockReturnValue(err(new Error("Invalid title")));
+    const mockToBody: ToBody = jest.fn().mockReturnValue(ok('Valid Body'));
+    const mockToArticleStatus: ToArticleStatus = jest.fn().mockReturnValue(ok(ArticleStatus.Draft));
+
+    // when
+    const createArticle = makeCreateArticle(mockToTitle, mockToBody, mockToArticleStatus);
+    const result = createArticle(cmd);
+
+    // then
+    expect(result.isErr()).toBe(true);
+  });
+
+  test('無効な本文が提供された場合、エラーを返すこと', () => {
+    // given
+    const cmd = toCreateArticleCommand('author1', 'Valid Title', 'Invalid Body');
+
+    const mockToTitle: ToTitle = jest.fn().mockReturnValue(ok('Valid Title'));
+    const mockToBody: ToBody = jest.fn().mockReturnValue(err(new Error("Invalid body")));
+    const mockToArticleStatus: ToArticleStatus = jest.fn().mockReturnValue(ok(ArticleStatus.Draft));
+
+    // when
+    const createArticle = makeCreateArticle(mockToTitle, mockToBody, mockToArticleStatus);
+    const result = createArticle(cmd);
+
+    // then
+    expect(result.isErr()).toBe(true);
+  });
+
+  test('無効なステータスが提供された場合、エラーを返すこと', () => {
+    // given
+    const cmd = toCreateArticleCommand('author1', 'Valid Title', 'Valid Body', 'Invalid Status');
+
+    const mockToTitle: ToTitle = jest.fn().mockReturnValue(ok('Valid Title'));
+    const mockToBody: ToBody = jest.fn().mockReturnValue(ok('Valid Body'));
+    const mockToArticleStatus: ToArticleStatus = jest.fn().mockReturnValue(err(new Error("Invalid status")));
+
+    // when
+    const createArticle = makeCreateArticle(mockToTitle, mockToBody, mockToArticleStatus);
+    const result = createArticle(cmd);
+
+    // then
+    expect(result.isErr()).toBe(true);
   });
 });

@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { handleArticleError } from '../../author/article/handle-article-error';
 import { articleIdSchema } from '../../author/schema/author-article-schema';
-import { makeFindArticleById } from '../../../infra/repository/article-ddb-repository/find-article-by-id';
 import { validateWithSchema } from '../../shared/validator/validator';
 import { makeGetPublicArticleUseCase } from '@/use-case/visitor/article/get-public-article-use-case';
+import { makeFindArticleById } from '@/infra/repository/article-ddb-repository';
+import { validatePublishedArticle } from '@/domain/article/service/article-service';
 
 export const getPublicArticleHandler = async (
   req: Request,
@@ -20,6 +21,7 @@ export const getPublicArticleHandler = async (
   };
 
   const getPublicArticleUseCase = makeGetPublicArticleUseCase(
+    validatePublishedArticle,
     makeFindArticleById(req.context.client),
   );
 

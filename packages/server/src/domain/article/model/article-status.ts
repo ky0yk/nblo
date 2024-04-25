@@ -11,7 +11,9 @@ export const ArticleStatus = {
 
 export type ArticleStatus = (typeof ArticleStatus)[keyof typeof ArticleStatus];
 
-export const toArticleStatus = (value: string): Result<ArticleStatus, Error> =>
+export type ToArticleStatus= (value: string) => Result<ArticleStatus, Error>
+
+export const toArticleStatus: ToArticleStatus = (value) =>
   Object.values(ArticleStatus).includes(value as ArticleStatus)
     ? ok(value as ArticleStatus)
     : err(new InvalidArticleStatusError('Invalid article status'));
@@ -29,10 +31,15 @@ const canChangeStatus = (
   return allowedTransitions[currentStatus]?.includes(newStatus) ?? false;
 };
 
-export const validStatusTransition = (
+export type ValidStatusTransition = (
   currentStatus: ArticleStatus,
   newStatusInput: string,
-): Result<ArticleStatus, Error> => {
+) => Result<ArticleStatus, Error>
+
+export const validStatusTransition: ValidStatusTransition = (
+  currentStatus,
+  newStatusInput,
+) => {
   const newStatusResult = toArticleStatus(newStatusInput);
 
   return newStatusResult.andThen((newStatus) => {
