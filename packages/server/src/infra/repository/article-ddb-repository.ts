@@ -5,9 +5,9 @@ import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { DeleteArticleById, FindArticleById, SaveArticle } from '@/domain/article/interface/article-repository';
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { DynamoDbResultClient } from '../client/dynamodb-result-client';
 import { SavedArticle } from '@/domain/article/model/article';
 import { errAsync, okAsync } from 'neverthrow';
+import { DynamoDbResultClient } from '../client/dynamodb-result-client';
 
 
 export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {
@@ -39,12 +39,10 @@ export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {
   return saveArticle;
 };
 
-export const makeFindArticleById = (client: DynamoDbResultClient) => {
+export const makeFindArticleById = (ddbResultClient: DynamoDbResultClient) => {
   const findArticleById: FindArticleById = (articleId) => {
     const TABLE_NAME = process.env.TABLE_NAME;
     const GSI_NAME = 'ArticleIdIndex';
-
-    const MAX_QUERY_LIMIT = 10;
 
     const input: QueryCommandInput = {
       TableName: TABLE_NAME,
@@ -55,8 +53,8 @@ export const makeFindArticleById = (client: DynamoDbResultClient) => {
       },
     };
 
-    return client
-      .queryRecursively(input, MAX_QUERY_LIMIT)
+    return ddbResultClient
+      .queryItem(input)
       .andThen((queryOutput) => {
         if (!queryOutput.Items || queryOutput.Items.length === 0) {
           return errAsync(new Error());

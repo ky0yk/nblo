@@ -135,7 +135,7 @@ describe('makeFindArticleById', () => {
     };
 
     const mockDdbResultClient = {
-      queryRecursively: jest.fn().mockReturnValue(
+      queryItem: jest.fn().mockReturnValue(
         okAsync({
           Items: [marshall(expectedArticle)],
         })
@@ -156,7 +156,7 @@ describe('makeFindArticleById', () => {
     const nonExistingArticleId = 'non-existing-article-id';
 
     const mockDdbResultClient = {
-      queryRecursively: jest.fn().mockReturnValue(
+      queryItem: jest.fn().mockReturnValue(
         okAsync({
           Items: [],
         })
@@ -178,7 +178,7 @@ describe('makeFindArticleById', () => {
     const mockError = new Error('Failed to query DynamoDB');
 
     const mockDdbResultClient = {
-      queryRecursively: jest.fn().mockReturnValue(errAsync(mockError)),
+      queryItem: jest.fn().mockReturnValue(errAsync(mockError)),
     };
 
     const findArticleById = makeFindArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
