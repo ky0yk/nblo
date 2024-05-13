@@ -14,7 +14,10 @@ interface Input {
 }
 type CreateArticleUseCase = (input: Input) => ResultAsync<SavedArticle, Error>;
 
-export const makeCreateArticleUseCase = (createArticle: CreateArticle, saveArticle: SaveArticle) => {
+export const makeCreateArticleUseCase = (
+  createArticle: CreateArticle,
+  saveArticle: SaveArticle,
+) => {
   const createArticleUseCase: CreateArticleUseCase = (input) => {
     const command = toCreateArticleCommand(
       input.authorId,

@@ -33,13 +33,15 @@ const isUpdateEmpty = (update: UpdateArticleCommand['update']): boolean => {
   return Object.keys(update).length === 0;
 };
 
-export type UpdateArticle = (cmd: UpdateArticleCommand) => Result<ValidatedArticle, Error>
+export type UpdateArticle = (
+  cmd: UpdateArticleCommand,
+) => Result<ValidatedArticle, Error>;
 
 export const makeUpdateArticle = (
   toTitle: ToTitle,
   toBody: ToBody,
-  validStatusTransition: ValidStatusTransition
-)=> {
+  validStatusTransition: ValidStatusTransition,
+) => {
   const updateArticle: UpdateArticle = (cmd) => {
     if (isUpdateEmpty(cmd.update)) {
       return err(new UpdateDataEmptyError('Update data is empty'));
@@ -53,17 +55,15 @@ export const makeUpdateArticle = (
       ? validStatusTransition(oldStatus, newStatus)
       : ok(oldStatus);
 
-    return Result.combine([
-      titleResult,
-      bodyResult,
-      statusResult,
-    ]).map(([title, body, status]) => ({
-      ...cmd.article,
-      title,
-      body,
-      status,
-      updatedAt: new Date().toISOString()
-    }));
+    return Result.combine([titleResult, bodyResult, statusResult]).map(
+      ([title, body, status]) => ({
+        ...cmd.article,
+        title,
+        body,
+        status,
+        updatedAt: new Date().toISOString(),
+      }),
+    );
   };
 
   return updateArticle;

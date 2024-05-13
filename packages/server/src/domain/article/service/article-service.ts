@@ -6,8 +6,10 @@ export class ArticleNotPublishedError extends Error {}
 export class InvalidLengthError extends Error {}
 export class ContainsForbiddenWordsError extends Error {}
 
-export type ValidatePublishedArticle = (article: SavedArticle) => Result<SavedArticle, Error>
-export const validatePublishedArticle: ValidatePublishedArticle  = (article) => {
+export type ValidatePublishedArticle = (
+  article: SavedArticle,
+) => Result<SavedArticle, Error>;
+export const validatePublishedArticle: ValidatePublishedArticle = (article) => {
   return article.status === ArticleStatus.Published
     ? ok(article)
     : err(new ArticleNotPublishedError('Article is not published'));

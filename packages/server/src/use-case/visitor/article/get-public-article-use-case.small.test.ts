@@ -29,9 +29,11 @@ describe('makeGetPublicArticleUseCase', () => {
     const mockFindArticleById: FindArticleById = jest.fn(() => {
       return okAsync(publishedArticle);
     });
-    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn((article) => {
-      return ok(article);
-    });
+    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn(
+      (article) => {
+        return ok(article);
+      },
+    );
 
     // when
     const getPublicArticleUseCase = makeGetPublicArticleUseCase(
@@ -66,9 +68,11 @@ describe('makeGetPublicArticleUseCase', () => {
     const mockFindArticleById: FindArticleById = jest.fn(() => {
       return okAsync(draftArticle);
     });
-    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn(() => {
-      return err(articleNotPublishedError);
-    });
+    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn(
+      () => {
+        return err(articleNotPublishedError);
+      },
+    );
 
     // when
     const getPublicArticleUseCase = makeGetPublicArticleUseCase(
@@ -103,9 +107,11 @@ describe('makeGetPublicArticleUseCase', () => {
     const mockFindArticleById: FindArticleById = jest.fn(() => {
       return okAsync(draftArticle);
     });
-    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn(() => {
-      return err(articleNotPublishedError);
-    });
+    const mockValidatePublishedArticle: ValidatePublishedArticle = jest.fn(
+      () => {
+        return err(articleNotPublishedError);
+      },
+    );
 
     // when
     const getPublicArticleUseCase = makeGetPublicArticleUseCase(
@@ -120,5 +126,5 @@ describe('makeGetPublicArticleUseCase', () => {
     expect(mockFindArticleById).toHaveBeenCalledWith(articleId);
     expect(mockValidatePublishedArticle).toHaveBeenCalledTimes(1);
     expect(mockValidatePublishedArticle).toHaveBeenCalledWith(draftArticle);
-  });  
+  });
 });

@@ -1,11 +1,21 @@
-import { ArticleId, SavedArticle, ValidatedArticle } from "@/domain/article/model/article";
+import {
+  ArticleId,
+  SavedArticle,
+  ValidatedArticle,
+} from '@/domain/article/model/article';
 import { ArticleStatus } from '../../../domain/article/model/article-status';
-import { ArticleTitle } from "@/domain/article/model/article-title";
-import { ArticleBody } from "@/domain/article/model/article-body";
-import { FindArticleById, SaveArticle } from "@/domain/article/interface/article-repository";
-import { err, errAsync, ok, okAsync } from "neverthrow";
-import { UpdateArticle, UpdateArticleCommand } from "@/domain/article/command/update-article-command";
-import { makeUpdateArticleUseCase } from "./update-article";
+import { ArticleTitle } from '@/domain/article/model/article-title';
+import { ArticleBody } from '@/domain/article/model/article-body';
+import {
+  FindArticleById,
+  SaveArticle,
+} from '@/domain/article/interface/article-repository';
+import { err, errAsync, ok, okAsync } from 'neverthrow';
+import {
+  UpdateArticle,
+  UpdateArticleCommand,
+} from '@/domain/article/command/update-article-command';
+import { makeUpdateArticleUseCase } from './update-article';
 
 interface Input {
   articleId: string;
@@ -33,18 +43,18 @@ describe('makeUpdateArticleUseCase', () => {
       },
     };
     const foundArticle: SavedArticle = {
-        articleId: '1',
-        authorId: 'author1',
-        title: 'Original Title' as unknown as ArticleTitle,
-        body: 'Original Body' as unknown as ArticleBody,
-        status: ArticleStatus.Draft,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      articleId: '1',
+      authorId: 'author1',
+      title: 'Original Title' as unknown as ArticleTitle,
+      body: 'Original Body' as unknown as ArticleBody,
+      status: ArticleStatus.Draft,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
     const updateCommand: UpdateArticleCommand = {
-        article: foundArticle,
-        update: input.update,
-        };
+      article: foundArticle,
+      update: input.update,
+    };
     const updatedArticle: ValidatedArticle = {
       articleId,
       authorId: 'author1',
@@ -127,18 +137,18 @@ describe('makeUpdateArticleUseCase', () => {
       },
     };
     const foundArticle: SavedArticle = {
-        articleId: '1',
-        authorId: 'author1',
-        title: 'Original Title' as unknown as ArticleTitle,
-        body: 'Original Body' as unknown as ArticleBody,
-        status: ArticleStatus.Draft,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      articleId: '1',
+      authorId: 'author1',
+      title: 'Original Title' as unknown as ArticleTitle,
+      body: 'Original Body' as unknown as ArticleBody,
+      status: ArticleStatus.Draft,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
     const updateCommand: UpdateArticleCommand = {
-        article: foundArticle,
-        update: input.update,
-        };
+      article: foundArticle,
+      update: input.update,
+    };
     const domainError = new Error('Domain error');
 
     const mockFindArticleById: FindArticleById = jest.fn(() => {
@@ -178,19 +188,19 @@ describe('makeUpdateArticleUseCase', () => {
       },
     };
     const foundArticle: SavedArticle = {
-        articleId: '1',
-        authorId: 'author1',
-        title: 'Original Title' as unknown as ArticleTitle,
-        body: 'Original Body' as unknown as ArticleBody,
-        status: ArticleStatus.Draft,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      const updateCommand: UpdateArticleCommand = {
-        article: foundArticle,
-        update: input.update,
-        };
-      const updatedArticle: ValidatedArticle = {
+      articleId: '1',
+      authorId: 'author1',
+      title: 'Original Title' as unknown as ArticleTitle,
+      body: 'Original Body' as unknown as ArticleBody,
+      status: ArticleStatus.Draft,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const updateCommand: UpdateArticleCommand = {
+      article: foundArticle,
+      update: input.update,
+    };
+    const updatedArticle: ValidatedArticle = {
       articleId,
       authorId: 'author1',
       title: 'Original Title' as unknown as ArticleTitle,

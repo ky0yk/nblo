@@ -7,8 +7,6 @@ import { ArticleBody } from '@/domain/article/model/article-body';
 import { ArticleStatus } from '../../../domain/article/model/article-status';
 
 describe('makeGetOwnArticleUseCase', () => {
-
-
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -27,7 +25,7 @@ describe('makeGetOwnArticleUseCase', () => {
       updatedAt: new Date().toISOString(),
     };
 
-    const mockFindArticleById: FindArticleById = jest.fn((articleId) => {
+    const mockFindArticleById: FindArticleById = jest.fn(() => {
       return okAsync(savedArticle);
     });
 
@@ -46,8 +44,8 @@ describe('makeGetOwnArticleUseCase', () => {
     const articleId = 'article-id' as unknown as ArticleId;
     const input = { articleId };
 
-    const mockFindArticleById: FindArticleById = jest.fn((articleId) => {
-        return errAsync(new Error());
+    const mockFindArticleById: FindArticleById = jest.fn(() => {
+      return errAsync(new Error());
     });
 
     // when
@@ -55,7 +53,7 @@ describe('makeGetOwnArticleUseCase', () => {
     const result = await getOwnArticleUseCase(input);
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
     expect(mockFindArticleById).toHaveBeenCalledTimes(1);
     expect(mockFindArticleById).toHaveBeenCalledWith(articleId);
   });

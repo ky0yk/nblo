@@ -23,7 +23,7 @@ export const createArticleHandler = async (
     ...body.value,
   };
 
-  const createArticle = makeCreateArticle(toTitle, toBody, toArticleStatus)
+  const createArticle = makeCreateArticle(toTitle, toBody, toArticleStatus);
 
   const createArticleUseCase = makeCreateArticleUseCase(
     createArticle,

@@ -1,6 +1,5 @@
 import { toTitle } from './article-title';
 
-
 describe('toTitle', () => {
   test('有効なタイトルが与えられた場合、成功のResultを返す', () => {
     // given
@@ -28,7 +27,7 @@ describe('toTitle', () => {
 
   test('タイトルに禁止語句が含まれている場合、エラーを返す', () => {
     // given
-    const ngWord = 'NGWord1'
+    const ngWord = 'NGWord1';
     const title = `${ngWord} Containing Title`;
 
     // when

@@ -4,8 +4,6 @@ import { ArticleId, AuthorId } from '@/domain/article/model/article';
 import { errAsync, okAsync } from 'neverthrow';
 
 describe('makeDeleteArticleUseCase', () => {
-
-
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -16,12 +14,14 @@ describe('makeDeleteArticleUseCase', () => {
     const articleId = 'article-id' as unknown as ArticleId;
     const input = { authorId, articleId };
 
-    const mockDeleteArticleById: DeleteArticleById = jest.fn(({ authorId, articleId }) => {
+    const mockDeleteArticleById: DeleteArticleById = jest.fn(() => {
       return okAsync(undefined);
     });
 
     // when
-    const deleteArticleUseCase = makeDeleteArticleUseCase(mockDeleteArticleById);
+    const deleteArticleUseCase = makeDeleteArticleUseCase(
+      mockDeleteArticleById,
+    );
     const result = await deleteArticleUseCase(input);
 
     // then
@@ -36,16 +36,20 @@ describe('makeDeleteArticleUseCase', () => {
     const articleId = 'article-id' as unknown as ArticleId;
     const input = { articleId };
 
-    const mockDeleteArticleById: DeleteArticleById = jest.fn(({ authorId, articleId }) => {
-      return errAsync(new Error());
-    });
+    const mockDeleteArticleById: DeleteArticleById = jest.fn(
+      () => {
+        return errAsync(new Error());
+      },
+    );
 
     // when
-    const deleteArticleUseCase = makeDeleteArticleUseCase(mockDeleteArticleById);
+    const deleteArticleUseCase = makeDeleteArticleUseCase(
+      mockDeleteArticleById,
+    );
     const result = await deleteArticleUseCase(input);
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
     expect(mockDeleteArticleById).toHaveBeenCalledTimes(1);
     expect(mockDeleteArticleById).toHaveBeenCalledWith({ authorId, articleId });
   });

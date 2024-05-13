@@ -1,8 +1,8 @@
 import { Result } from 'neverthrow';
 import { ValidatedArticle } from '../model/article';
 import { ArticleStatus, ToArticleStatus } from '../model/article-status';
-import { ToTitle} from '../model/article-title';
-import { ToBody} from '../model/article-body';
+import { ToTitle } from '../model/article-title';
+import { ToBody } from '../model/article-body';
 
 export interface CreateArticleCommand {
   authorId: string;
@@ -25,12 +25,14 @@ export const toCreateArticleCommand = (
   };
 };
 
-export type CreateArticle = (cmd: CreateArticleCommand) => Result<ValidatedArticle, Error>;
+export type CreateArticle = (
+  cmd: CreateArticleCommand,
+) => Result<ValidatedArticle, Error>;
 
 export const makeCreateArticle = (
   toTitle: ToTitle,
   toBody: ToBody,
-  toArticleStatus: ToArticleStatus
+  toArticleStatus: ToArticleStatus,
 ) => {
   const createArticle: CreateArticle = (cmd) => {
     const statusResult = toArticleStatus(cmd.status || ArticleStatus.Draft);

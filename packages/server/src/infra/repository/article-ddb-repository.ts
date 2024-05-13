@@ -1,14 +1,16 @@
-
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
-import { DeleteArticleById, FindArticleById, SaveArticle } from '@/domain/article/interface/article-repository';
+import {
+  DeleteArticleById,
+  FindArticleById,
+  SaveArticle,
+} from '@/domain/article/interface/article-repository';
 import { QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { SavedArticle } from '@/domain/article/model/article';
 import { errAsync, okAsync } from 'neverthrow';
 import { DynamoDbResultClient } from '../client/dynamodb-result-client';
-
 
 export const makeSaveArticle = (ddbResultClient: DynamoDbResultClient) => {
   const saveArticle: SaveArticle = (model) => {
@@ -53,19 +55,16 @@ export const makeFindArticleById = (ddbResultClient: DynamoDbResultClient) => {
       },
     };
 
-    return ddbResultClient
-      .queryItem(input)
-      .andThen((queryOutput) => {
-        if (!queryOutput.Items || queryOutput.Items.length === 0) {
-          return errAsync(new Error());
-        }
-        return okAsync(unmarshall(queryOutput.Items[0]) as SavedArticle);
-      })
+    return ddbResultClient.queryItem(input).andThen((queryOutput) => {
+      if (!queryOutput.Items || queryOutput.Items.length === 0) {
+        return errAsync(new Error());
+      }
+      return okAsync(unmarshall(queryOutput.Items[0]) as SavedArticle);
+    });
   };
 
   return findArticleById;
 };
-
 
 export const makeDeleteArticleById = (
   ddbResultClient: DynamoDbResultClient,

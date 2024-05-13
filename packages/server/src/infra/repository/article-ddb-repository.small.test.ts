@@ -1,6 +1,15 @@
 import { okAsync, errAsync } from 'neverthrow';
-import { makeDeleteArticleById, makeFindArticleById, makeSaveArticle } from './article-ddb-repository';
-import { AuthorId, ValidatedArticle, SavedArticle, ArticleId } from '@/domain/article/model/article';
+import {
+  makeDeleteArticleById,
+  makeFindArticleById,
+  makeSaveArticle,
+} from './article-ddb-repository';
+import {
+  AuthorId,
+  ValidatedArticle,
+  SavedArticle,
+  ArticleId,
+} from '@/domain/article/model/article';
 import { ArticleTitle } from '@/domain/article/model/article-title';
 import { ArticleBody } from '@/domain/article/model/article-body';
 import { ArticleStatus } from '../../domain/article/model/article-status';
@@ -8,7 +17,7 @@ import { DynamoDbResultClient } from '../client/dynamodb-result-client';
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 jest.mock('uuid', () => ({
-  v4: jest.fn(() => 'fixed-uuid')
+  v4: jest.fn(() => 'fixed-uuid'),
 }));
 
 describe('makeSaveArticle', () => {
@@ -26,21 +35,23 @@ describe('makeSaveArticle', () => {
       authorId: 'author1' as AuthorId,
       title: 'Test Title' as ArticleTitle,
       body: 'Test Body' as ArticleBody,
-      status: ArticleStatus.Draft
+      status: ArticleStatus.Draft,
     };
 
     const expectedArticle: SavedArticle = {
       ...input,
       articleId: 'fixed-uuid',
       createdAt: mockDate.toISOString(),
-      updatedAt: mockDate.toISOString()
+      updatedAt: mockDate.toISOString(),
     };
 
     const mockDdbResultClient = {
-      putItem: jest.fn().mockReturnValue(okAsync(expectedArticle))
-    }
+      putItem: jest.fn().mockReturnValue(okAsync(expectedArticle)),
+    };
 
-    const saveArticle = makeSaveArticle(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const saveArticle = makeSaveArticle(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await saveArticle(input);
@@ -49,7 +60,7 @@ describe('makeSaveArticle', () => {
     expect(result._unsafeUnwrap()).toEqual(expectedArticle);
     expect(mockDdbResultClient.putItem).toHaveBeenCalledWith({
       TableName: 'Articles',
-      Item: expectedArticle
+      Item: expectedArticle,
     });
   });
 
@@ -64,21 +75,23 @@ describe('makeSaveArticle', () => {
       body: 'Test Body' as ArticleBody,
       status: ArticleStatus.Draft,
       articleId: 'existing-article-id' as ArticleId,
-      createdAt: new Date('2019-01-01T00:00:00.000Z').toISOString()
+      createdAt: new Date('2019-01-01T00:00:00.000Z').toISOString(),
     };
 
     const expectedArticle: SavedArticle = {
       ...input,
       articleId: 'existing-article-id' as ArticleId,
       createdAt: new Date('2019-01-01T00:00:00.000Z').toISOString(),
-      updatedAt: mockDate.toISOString()
+      updatedAt: mockDate.toISOString(),
     };
 
     const mockDdbResultClient = {
-      putItem: jest.fn().mockReturnValue(okAsync(expectedArticle))
-    }
+      putItem: jest.fn().mockReturnValue(okAsync(expectedArticle)),
+    };
 
-    const saveArticle = makeSaveArticle(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const saveArticle = makeSaveArticle(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await saveArticle(input);
@@ -87,7 +100,7 @@ describe('makeSaveArticle', () => {
     expect(result._unsafeUnwrap()).toEqual(expectedArticle);
     expect(mockDdbResultClient.putItem).toHaveBeenCalledWith({
       TableName: 'Articles',
-      Item: expectedArticle
+      Item: expectedArticle,
     });
   });
 
@@ -98,14 +111,16 @@ describe('makeSaveArticle', () => {
       title: 'Test Title' as ArticleTitle,
       body: 'Test Body' as ArticleBody,
       status: ArticleStatus.Draft,
-      articleId: 'existing-article-id' as ArticleId
+      articleId: 'existing-article-id' as ArticleId,
     };
     const mockError = new Error('Failed to put item');
     const mockDdbResultClient = {
-      putItem: jest.fn().mockReturnValue(errAsync(mockError))
-    }
+      putItem: jest.fn().mockReturnValue(errAsync(mockError)),
+    };
 
-    const saveArticle = makeSaveArticle(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const saveArticle = makeSaveArticle(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await saveArticle(input);
@@ -114,7 +129,6 @@ describe('makeSaveArticle', () => {
     expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
 });
-
 
 describe('makeFindArticleById', () => {
   afterEach(() => {
@@ -138,11 +152,13 @@ describe('makeFindArticleById', () => {
       queryItem: jest.fn().mockReturnValue(
         okAsync({
           Items: [marshall(expectedArticle)],
-        })
+        }),
       ),
     };
 
-    const findArticleById = makeFindArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const findArticleById = makeFindArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await findArticleById(existingArticleId);
@@ -159,17 +175,19 @@ describe('makeFindArticleById', () => {
       queryItem: jest.fn().mockReturnValue(
         okAsync({
           Items: [],
-        })
+        }),
       ),
     };
 
-    const findArticleById = makeFindArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const findArticleById = makeFindArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await findArticleById(nonExistingArticleId);
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
 
   test('DynamoDBクエリ中にエラーが発生した場合、エラーが返される', async () => {
@@ -181,16 +199,17 @@ describe('makeFindArticleById', () => {
       queryItem: jest.fn().mockReturnValue(errAsync(mockError)),
     };
 
-    const findArticleById = makeFindArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const findArticleById = makeFindArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await findArticleById(articleId);
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
 });
-
 
 describe('makeDeleteArticleById', () => {
   afterEach(() => {
@@ -206,7 +225,9 @@ describe('makeDeleteArticleById', () => {
       deleteItem: jest.fn().mockReturnValue(okAsync({})),
     };
 
-    const deleteArticleById = makeDeleteArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const deleteArticleById = makeDeleteArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await deleteArticleById({ authorId, articleId });
@@ -232,13 +253,15 @@ describe('makeDeleteArticleById', () => {
       deleteItem: jest.fn().mockReturnValue(errAsync(mockError)),
     };
 
-    const deleteArticleById = makeDeleteArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const deleteArticleById = makeDeleteArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await deleteArticleById({ authorId, articleId });
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
 
   test('DynamoDBの削除処理中にエラーが発生した場合、エラーが返される', async () => {
@@ -251,12 +274,14 @@ describe('makeDeleteArticleById', () => {
       deleteItem: jest.fn().mockReturnValue(errAsync(mockError)),
     };
 
-    const deleteArticleById = makeDeleteArticleById(mockDdbResultClient as unknown as DynamoDbResultClient);
+    const deleteArticleById = makeDeleteArticleById(
+      mockDdbResultClient as unknown as DynamoDbResultClient,
+    );
 
     // when
     const result = await deleteArticleById({ authorId, articleId });
 
     // then
-    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error)
+    expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
 });

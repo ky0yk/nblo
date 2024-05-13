@@ -11,7 +11,7 @@ export const ArticleStatus = {
 
 export type ArticleStatus = (typeof ArticleStatus)[keyof typeof ArticleStatus];
 
-export type ToArticleStatus= (value: string) => Result<ArticleStatus, Error>
+export type ToArticleStatus = (value: string) => Result<ArticleStatus, Error>;
 
 export const toArticleStatus: ToArticleStatus = (value) =>
   Object.values(ArticleStatus).includes(value as ArticleStatus)
@@ -34,7 +34,7 @@ const canChangeStatus = (
 export type ValidStatusTransition = (
   currentStatus: ArticleStatus,
   newStatusInput: string,
-) => Result<ArticleStatus, Error>
+) => Result<ArticleStatus, Error>;
 
 export const validStatusTransition: ValidStatusTransition = (
   currentStatus,

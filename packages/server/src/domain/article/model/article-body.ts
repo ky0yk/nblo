@@ -6,7 +6,7 @@ export type ArticleBody = string & { readonly brand: unique symbol };
 const MIN_CHARACTER = 1;
 const MAX_CHARACTER = 10000;
 
-export type ToBody = (body: string) => Result<ArticleBody, Error>
+export type ToBody = (body: string) => Result<ArticleBody, Error>;
 
 export const toBody: ToBody = (body) => {
   const validateLengthRange = validateLength(MIN_CHARACTER, MAX_CHARACTER);

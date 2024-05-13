@@ -1,10 +1,16 @@
-
-
 import { SavedArticle } from '../model/article';
 import { ArticleBody, ToBody, toBody } from '../model/article-body';
 import { ArticleTitle, ToTitle, toTitle } from '../model/article-title';
-import { ArticleStatus, ValidStatusTransition, validStatusTransition } from '../model/article-status';
-import { UpdateDataEmptyError, makeUpdateArticle, toUpdateArticleCommand } from './update-article-command';
+import {
+  ArticleStatus,
+  ValidStatusTransition,
+  validStatusTransition,
+} from '../model/article-status';
+import {
+  UpdateDataEmptyError,
+  makeUpdateArticle,
+  toUpdateArticleCommand,
+} from './update-article-command';
 import { err } from 'neverthrow';
 
 describe('updateArticle', () => {
@@ -32,7 +38,11 @@ describe('updateArticle', () => {
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, update);
-    const updateArticle = makeUpdateArticle(toTitle, toBody, validStatusTransition)
+    const updateArticle = makeUpdateArticle(
+      toTitle,
+      toBody,
+      validStatusTransition,
+    );
     const result = updateArticle(cmd);
 
     // then
@@ -59,9 +69,12 @@ describe('updateArticle', () => {
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, emptyUpdate);
-    const updateArticle = makeUpdateArticle(toTitle, toBody, validStatusTransition)
+    const updateArticle = makeUpdateArticle(
+      toTitle,
+      toBody,
+      validStatusTransition,
+    );
     const result = updateArticle(cmd);
-
 
     // then
     expect(result.isErr()).toBe(true);
@@ -84,12 +97,16 @@ describe('updateArticle', () => {
     const invalidUpdate = { title: 'invalid-title' };
 
     const mockToTitle: ToTitle = jest.fn(() => {
-      return err(new Error())
-    })
+      return err(new Error());
+    });
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
-    const updateArticle = makeUpdateArticle(mockToTitle, toBody, validStatusTransition)
+    const updateArticle = makeUpdateArticle(
+      mockToTitle,
+      toBody,
+      validStatusTransition,
+    );
     const result = updateArticle(cmd);
 
     // then
@@ -111,14 +128,18 @@ describe('updateArticle', () => {
     };
 
     const mockToBody: ToBody = jest.fn(() => {
-      return err(new Error())
-    })
+      return err(new Error());
+    });
 
     const invalidUpdate = { body: 'invalid-body' };
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
-    const updateArticle = makeUpdateArticle(toTitle, mockToBody, validStatusTransition)
+    const updateArticle = makeUpdateArticle(
+      toTitle,
+      mockToBody,
+      validStatusTransition,
+    );
     const result = updateArticle(cmd);
 
     // then
@@ -139,14 +160,18 @@ describe('updateArticle', () => {
     };
 
     const mockValidStatusTransition: ValidStatusTransition = jest.fn(() => {
-      return err(new Error())
-    })
+      return err(new Error());
+    });
 
     const invalidUpdate = { status: 'invalid-status' };
 
     // when
     const cmd = toUpdateArticleCommand(savedArticle, invalidUpdate);
-    const updateArticle = makeUpdateArticle(toTitle, toBody, mockValidStatusTransition)
+    const updateArticle = makeUpdateArticle(
+      toTitle,
+      toBody,
+      mockValidStatusTransition,
+    );
     const result = updateArticle(cmd);
 
     // then

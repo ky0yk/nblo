@@ -1,6 +1,5 @@
 import { toBody, ArticleBody } from './article-body';
 
-
 describe('toTitle', () => {
   test('有効な本文が与えられた場合、成功のResultを返す', () => {
     // given
@@ -37,4 +36,4 @@ describe('toTitle', () => {
     expect(result.isErr()).toBe(true);
     expect(result._unsafeUnwrapErr()).toBeInstanceOf(Error);
   });
-})
+});

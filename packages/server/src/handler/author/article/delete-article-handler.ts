@@ -23,7 +23,7 @@ export const deleteArticleHandler = async (
   );
 
   return await deleteArticleUseCase(input).match(
-    (_) => res.status(204).send(),
+    () => res.status(204).send(),
     (error: Error) => handleArticleError(res, error),
   );
 };
