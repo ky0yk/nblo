@@ -17,8 +17,8 @@ describe('filterPublishedArticle', () => {
     const article: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Published,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -37,8 +37,8 @@ describe('filterPublishedArticle', () => {
     const article: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

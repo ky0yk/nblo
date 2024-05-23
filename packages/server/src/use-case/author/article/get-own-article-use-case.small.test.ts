@@ -41,7 +41,7 @@ describe('makeGetOwnArticleUseCase', () => {
 
   test('記事の取得中にエラーが発生した場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input = { articleId };
 
     const mockFindArticleById: FindArticleById = jest.fn(() => {

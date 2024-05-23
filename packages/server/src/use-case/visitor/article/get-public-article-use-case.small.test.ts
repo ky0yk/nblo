@@ -14,13 +14,13 @@ describe('makeGetPublicArticleUseCase', () => {
 
   test('公開済みの記事を取得できる', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input = { articleId };
     const publishedArticle: SavedArticle = {
       articleId,
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Published,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -52,13 +52,13 @@ describe('makeGetPublicArticleUseCase', () => {
 
   test('公開済みでない記事の場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input = { articleId };
     const draftArticle: SavedArticle = {
       articleId,
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -91,13 +91,13 @@ describe('makeGetPublicArticleUseCase', () => {
 
   test('公開済みでない記事の場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input = { articleId };
     const draftArticle: SavedArticle = {
       articleId,
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

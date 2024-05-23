@@ -33,7 +33,7 @@ describe('makeUpdateArticleUseCase', () => {
 
   test('記事を正常に更新できる', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input: Input = {
       articleId,
       update: {
@@ -45,8 +45,8 @@ describe('makeUpdateArticleUseCase', () => {
     const foundArticle: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -58,8 +58,8 @@ describe('makeUpdateArticleUseCase', () => {
     const updatedArticle: ValidatedArticle = {
       articleId,
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Published,
     };
     const mockFindArticleById: FindArticleById = jest.fn(() => {
@@ -92,7 +92,7 @@ describe('makeUpdateArticleUseCase', () => {
 
   test('記事が存在しない場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input: Input = {
       articleId,
       update: {
@@ -127,7 +127,7 @@ describe('makeUpdateArticleUseCase', () => {
 
   test('記事の更新に失敗した場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input: Input = {
       articleId,
       update: {
@@ -139,8 +139,8 @@ describe('makeUpdateArticleUseCase', () => {
     const foundArticle: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -178,7 +178,7 @@ describe('makeUpdateArticleUseCase', () => {
 
   test('記事の保存に失敗した場合、エラーを返す', async () => {
     // given
-    const articleId = 'article-id' as unknown as ArticleId;
+    const articleId = 'article-id' as ArticleId;
     const input: Input = {
       articleId,
       update: {
@@ -190,8 +190,8 @@ describe('makeUpdateArticleUseCase', () => {
     const foundArticle: SavedArticle = {
       articleId: '1',
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Draft,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -203,8 +203,8 @@ describe('makeUpdateArticleUseCase', () => {
     const updatedArticle: ValidatedArticle = {
       articleId,
       authorId: 'author1',
-      title: 'Original Title' as unknown as ArticleTitle,
-      body: 'Original Body' as unknown as ArticleBody,
+      title: 'Original Title' as ArticleTitle,
+      body: 'Original Body' as ArticleBody,
       status: ArticleStatus.Published,
     };
     const infraError = new Error('Infrastructure error');

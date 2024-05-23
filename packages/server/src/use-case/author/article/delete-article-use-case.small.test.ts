@@ -10,8 +10,8 @@ describe('makeDeleteArticleUseCase', () => {
 
   test('記事を正常に削除できる', async () => {
     // given
-    const authorId = '1' as unknown as AuthorId;
-    const articleId = 'article-id' as unknown as ArticleId;
+    const authorId = '1' as AuthorId;
+    const articleId = 'article-id' as ArticleId;
     const input = { authorId, articleId };
 
     const mockDeleteArticleById: DeleteArticleById = jest.fn(() => {
@@ -32,8 +32,8 @@ describe('makeDeleteArticleUseCase', () => {
 
   test('記事の削除中にエラーが発生した場合、エラーを返す', async () => {
     // given
-    const authorId = '1' as unknown as AuthorId;
-    const articleId = 'article-id' as unknown as ArticleId;
+    const authorId = '1' as AuthorId;
+    const articleId = 'article-id' as ArticleId;
     const input = { articleId };
 
     const mockDeleteArticleById: DeleteArticleById = jest.fn(
